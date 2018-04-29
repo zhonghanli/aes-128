@@ -3,8 +3,8 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 package aes_const is
-    type s_box_vector is array(255 downto 0) of std_logic_vector(7 downto 0);
-    constant sbox : s_box_vector := (
+    type rijndael_vector is array(255 downto 0) of std_logic_vector(7 downto 0);
+    constant sbox : rijndael_vector := (
         X"63", X"7C", X"77", X"7B", X"F2", X"6B", X"6F", X"C5", X"30", X"01", X"67", X"2B", X"FE", X"D7", X"AB", X"76", 
         X"CA", X"82", X"C9", X"7D", X"FA", X"59", X"47", X"F0", X"AD", X"D4", X"A2", X"AF", X"9C", X"A4", X"72", X"C0", 
         X"B7", X"FD", X"93", X"26", X"36", X"3F", X"F7", X"CC", X"34", X"A5", X"E5", X"F1", X"71", X"D8", X"31", X"15", 
@@ -22,6 +22,25 @@ package aes_const is
         X"E1", X"F8", X"98", X"11", X"69", X"D9", X"8E", X"94", X"9B", X"1E", X"87", X"E9", X"CE", X"55", X"28", X"DF", 
         X"8C", X"A1", X"89", X"0D", X"BF", X"E6", X"42", X"68", X"41", X"99", X"2D", X"0F", X"B0", X"54", X"BB", X"16"
     );
+    
+    constant rcon : rijndael_vector := (
+    	X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a",
+    	X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39",
+    	X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a",
+    	X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8",
+    	X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef",
+    	X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc",
+    	X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b",
+    	X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3",
+    	X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94",
+    	X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20",
+    	X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35",
+    	X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f",
+    	X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04",
+    	X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63",
+    	X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd",
+    	X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d"
+    );
 
     function subBytes(x : std_logic_vector(7 downto 0))
         return std_logic_vector;
@@ -36,9 +55,9 @@ package aes_const is
     begin
         y_pos := to_integer(unsigned(x(7 downto 4)));
         x_pos := to_integer(unsigned(x(3 downto 0)));
-        pos := 16*y_pos+x_pos;
+        pos := 255-(16*y_pos+x_pos);
 
-        ret(7 downto 0) := to_stdlogicvector(sbox(pos));
+        ret(7 downto 0) := sbox(pos);
         return ret;
     end subBytes;
 
