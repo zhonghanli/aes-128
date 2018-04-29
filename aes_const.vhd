@@ -22,4 +22,24 @@ package aes_const is
         X"E1", X"F8", X"98", X"11", X"69", X"D9", X"8E", X"94", X"9B", X"1E", X"87", X"E9", X"CE", X"55", X"28", X"DF", 
         X"8C", X"A1", X"89", X"0D", X"BF", X"E6", X"42", X"68", X"41", X"99", X"2D", X"0F", X"B0", X"54", X"BB", X"16"
     );
-end aes_const;
+
+    function subBytes(x : std_logic_vector(7 downto 0))
+        return std_logic_vector;
+    end aes_const;
+
+    package body aes_const is
+
+    function subBytes(x : std_logic_vector(7 downto 0))
+                return std_logic_vector is
+        variable y_pos, x_pos, pos : integer;
+        variable ret : std_logic_vector(7 downto 0) := "00000000";
+    begin
+        y_pos := to_integer(unsigned(x(7 downto 4)));
+        x_pos := to_integer(unsigned(x(3 downto 0)));
+        pos := 16*y_pos+x_pos;
+
+        ret(7 downto 0) := to_stdlogicvector(sbox(pos));
+        return ret;
+    end subBytes;
+
+    end package body aes_const;
