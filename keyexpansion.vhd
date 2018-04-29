@@ -2,6 +2,8 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
+USE WORK.aes_const.all;
+
 
 entity keyexpansion is
 	generic
