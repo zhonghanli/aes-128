@@ -22,27 +22,6 @@ package aes_const is
         X"E1", X"F8", X"98", X"11", X"69", X"D9", X"8E", X"94", X"9B", X"1E", X"87", X"E9", X"CE", X"55", X"28", X"DF", 
         X"8C", X"A1", X"89", X"0D", X"BF", X"E6", X"42", X"68", X"41", X"99", X"2D", X"0F", X"B0", X"54", X"BB", X"16"
     );
-    
-    constant rcon : rijndael_vector := (
-    	X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a",
-    	X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39",
-    	X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a",
-    	X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8",
-    	X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef",
-    	X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc",
-    	X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b",
-    	X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35", X"6a", X"d4", X"b3",
-    	X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f", X"25", X"4a", X"94",
-    	X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04", X"08", X"10", X"20",
-    	X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63", X"c6", X"97", X"35",
-    	X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd", X"61", X"c2", X"9f",
-    	X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d", X"01", X"02", X"04",
-    	X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"6c", X"d8", X"ab", X"4d", X"9a", X"2f", X"5e", X"bc", X"63",
-    	X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd",
-    	X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d"
-    );
-end aes_const;
-
 
     
     constant rcon : rijndael_vector := (
@@ -63,9 +42,12 @@ end aes_const;
     	X"c6", X"97", X"35", X"6a", X"d4", X"b3", X"7d", X"fa", X"ef", X"c5", X"91", X"39", X"72", X"e4", X"d3", X"bd",
     	X"61", X"c2", X"9f", X"25", X"4a", X"94", X"33", X"66", X"cc", X"83", X"1d", X"3a", X"74", X"e8", X"cb", X"8d"
     );
+
+
 
     function subBytes(x : std_logic_vector(7 downto 0))
         return std_logic_vector;
+        
     end aes_const;
 
     package body aes_const is

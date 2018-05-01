@@ -15,5 +15,6 @@ architecture behavior of key_init is
 	signal 
 
 begin
+    
 
 end architecture behavior;
