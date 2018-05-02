@@ -3,3 +3,8 @@
 *.qdb
 *.qpg
 *.qtl
+*.txt
+
+vsim\.wlf
+
+work/_info
