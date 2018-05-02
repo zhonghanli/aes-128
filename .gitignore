@@ -13,6 +13,7 @@ work/_info
 [_@]*
 
 # ignore compilation output of ModelSim
+*.cr.mti
 *.mti
 *.dat
 *.dbs
@@ -22,7 +23,7 @@ work/_info
 *.jpg
 *.html
 *.bsf
-*.mpf
+aes128.mpf
 
 # ignore simulation output of ModelSim
 wlf*
@@ -33,3 +34,5 @@ cov*/
 transcript*
 sc_dpiheader.h
 vsim.dbg
+work/_vmake
+
