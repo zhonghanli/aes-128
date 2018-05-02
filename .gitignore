@@ -34,5 +34,5 @@ cov*/
 transcript*
 sc_dpiheader.h
 vsim.dbg
-work/_vmake
+work/*
 
