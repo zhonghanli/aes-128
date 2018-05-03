@@ -45,7 +45,7 @@ begin
 	case(key) is
 		when X"0E" =>
 			tempkey <= X"60";
-		whhen X"16" =>
+		when X"16" =>
 			tempkey <= X"31";
 		when X"1E" =>
 			tempkey <= X"32";
