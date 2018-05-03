@@ -367,9 +367,9 @@ begin
 		flag <= '1';
 		else
 		flag <= '0';
-			if history3 = X"5A" -- Enter key was pressed + released
+			if (history3 = X"5A") then -- Enter key was pressed + released -> initial case
 			key <= history0;
-			elsif history2 = X"F0" then -- eg 29 F0 29 28 -> key=28
+			elsif (history2 = X"F0") then -- eg 29 F0 29 28 -> key=28
 			key <= history0;
 			end if;
 		end if;
