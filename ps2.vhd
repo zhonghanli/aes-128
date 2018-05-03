@@ -40,11 +40,15 @@ signal history1 : std_logic_vector(7 downto 0);
 signal history0 : std_logic_vector(7 downto 0);
 signal read : std_logic;
 signal flag : std_logic;
+signal key : std_logic_vector(7 downto 0);
+signal tempkey : std_logic_vector(7 downto 0);
 
 begin
 
+keyprocess : process
+begin
 case(flag) is
-when 0 =>
+when '0' =>
 if (history1 = X"12") or (history1 = X"59") then
 	case(key) is
 		when X"0E" =>
@@ -181,6 +185,7 @@ if (history1 = X"12") or (history1 = X"59") then
 			tempkey <= X"38";
 		when X"7D" => --9
 			tempkey <= X"39";
+		when others =>
 	end case;
 else
 	case(key) is
@@ -318,10 +323,14 @@ else
 			tempkey <= X"38";
 		when X"7D" => --9
 			tempkey <= X"39";
+		when others =>
 	end case;
+
 end if;
-when 1 =>
+when '1' =>
+when others =>
 end case;
+end process;
 
 u1: keyboard port map(	
 				keyboard_clk => keyboard_clk,
@@ -355,10 +364,13 @@ begin
 	history1 <= history0;
 	history0 <= scan_code2;
 		if (history1 = history0) then
-		flag = 1;
+		flag <= '1';
 		else
-		flag = 0;
-		end if
+		flag <= '0';
+			if history1 /= X"F0" then
+			key <= history0;
+			end if;
+		end if;
 	end if;
 end process a1;
 
