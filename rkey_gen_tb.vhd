@@ -11,6 +11,7 @@ architecture behavior of rkey_gen_tb is
         port(
             clock : in std_logic;
             reset : in std_logic;
+            step : std_logic_vector(3 downto 0);
             in_key: in std_logic_vector(127 downto 0);
             out_key : out std_logic_vector(127 downto 0);
             out_ready : out std_logic
@@ -21,11 +22,12 @@ architecture behavior of rkey_gen_tb is
     signal reset : std_logic;
     constant clk_half_period : time := 1 ns;
 
+    signal step : std_logic_vector(3 downto 0);
     signal in_key_tb, out_key_tb : std_logic_vector(127 downto 0);
     signal out_ready_tb : std_logic;
 
 begin
-    dut : rkey_gen port map(clock, reset, in_key_tb, out_key_tb, out_ready_tb);
+    dut : rkey_gen port map(clock, reset, step, in_key_tb, out_key_tb, out_ready_tb);
 
     clock <= not clock after clk_half_period;
 
