@@ -69,9 +69,13 @@ begin
                 temp_out(95 downto 64) := in_key(95 downto 64) xor temp_out(127 downto 96);
                 temp_out(63 downto 32) := in_key(63 downto 32) xor temp_out(95 downto 64);
                 temp_out(31 downto 0) := in_key(31 downto 0) xor temp_out(63 downto 32);
-                output_vector_c <= temp_out;
+                out_key <= temp_out;
                 next_state <= s4;
             when s4 =>
+                            
+
+            when others =>
+                
 
                 
         end case;

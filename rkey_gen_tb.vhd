@@ -23,7 +23,7 @@ architecture behavior of rkey_gen_tb is
     constant clk_half_period : time := 1 ns;
 
     signal step : std_logic_vector(3 downto 0);
-    signal in_key_tb, out_key_tb : std_logic_vector(127 downto 0);
+    signal in_key_tb, out_key_tb, out_key1 : std_logic_vector(127 downto 0);
     signal out_ready_tb : std_logic;
 
 begin
@@ -36,13 +36,72 @@ begin
         reset <= '1';
         in_key_tb <= X"5468617473206D79204B756E67204675";
         step <= "0001";
-
         wait for 5 ns;
+        reset <= '0'; 
+        wait for 20 ns;
 
+        in_key_tb <= out_key_tb;
+        step <= "0010";
+        reset <= '1';
+        wait for 5 ns;
         reset <= '0';
+        wait for 20 ns;
 
-        wait for 100 ns;
+        in_key_tb <= out_key_tb;
+        step <= "0011";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
 
+        in_key_tb <= out_key_tb;
+        step <= "0100";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "0101";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "0110";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "0111";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "1000";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "1001";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
+
+        in_key_tb <= out_key_tb;
+        step <= "1010";
+        reset <= '1';
+        wait for 5 ns;
+        reset <= '0';
+        wait for 20 ns;
 
   
     end process;
