@@ -11,7 +11,8 @@ entity ps2 is
 			hist3 : out std_logic_vector(7 downto 0);
 			hist2 : out std_logic_vector(7 downto 0);
 			hist1 : out std_logic_vector(7 downto 0);
-			hist0 : out std_logic_vector(7 downto 0)
+			hist0 : out std_logic_vector(7 downto 0);
+			asciikey : out std_logic_vector(7 downto 0)
 		);
 end entity ps2;
 
