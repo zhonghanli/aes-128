@@ -16,18 +16,19 @@ entity rkey_gen is
 end entity rkey_gen;
 
 architecture behavior of rkey_gen is
-    type state_type is (s0, s1, s2, s3);
+    type state_type is (s0, s1, s2, s3, s4);
     signal state, next_state : state_type;
 
     
     type std_array is array(Natural range <>) of std_logic_vector(7 downto 0);
-    signal roundshifted_arr, roundshifted_arr_c : std_array(0 to 3);
-    signal subByte_arr, subByte_arr_c : std_array(0 to 3);
-    signal rcon_arr, rcon_arr_c : std_array(0 to 3);
+    signal roundshifted_arr, roundshifted_arr_c : std_array(3 downto 0);
+    signal subByte_arr, subByte_arr_c : std_array(3 downto 0);
+    signal rcon_arr, rcon_arr_c : std_array(3 downto 0);
     signal in_key_arr : std_array(15 downto 0);
-    
-    --step for rcon
-    signal step : std_logic_vector(3 downto 0);
+
+    signal output_vector, output_vector_c : std_logic_vector(127 downto 0);
+
+
 begin
 
     in_key_update : process(in_key)
@@ -37,12 +38,14 @@ begin
         end loop;
     end process in_key_update;
 
-    rk_gen_fsm: process(in_key, state, roundshifted_arr)
-        variable new_lastword : std_logic_vector(31 downto 0);
+    rk_gen_fsm: process(in_key, state, roundshifted_arr, subByte_arr, rcon_arr, output_vector)
+        variable temp_out : std_logic_vector(127 downto 0);
+
     begin
         roundshifted_arr_c <= roundshifted_arr;
         subByte_arr_c <= subByte_arr;
         rcon_arr_c <= rcon_arr;
+        output_vector_c <= output_vector;
 
         case(state) is
             when s0 => 
@@ -54,13 +57,23 @@ begin
                 end loop;
                 next_state <= s2;
             when s2 =>
-                rcon_arr_c(3) <= subByte_arr_c(3) xor rcon(to_integer(unsigned(step));
+                rcon_arr_c(3) <= subByte_arr(3) xor rcon(255 - to_integer(unsigned(step)));
+                for i in 0 to 2 loop
+                    rcon_arr_c(i) <= subByte_arr(i);
+                end loop;  
+                next_state <= s3;      
             when s3 =>
+                for i in 0 to 3 loop
+                    temp_out(127-i*8 downto 128-(i+1)*8) := in_key(127-i*8 downto 128-(i+1)*8) xor rcon_arr(3-i);
+                end loop;
+                temp_out(95 downto 64) := in_key(95 downto 64) xor temp_out(127 downto 96);
+                temp_out(63 downto 32) := in_key(63 downto 32) xor temp_out(95 downto 64);
+                temp_out(31 downto 0) := in_key(31 downto 0) xor temp_out(63 downto 32);
+                output_vector_c <= temp_out;
+                next_state <= s4;
+            when s4 =>
 
-                -- shifted_key(31 downto 24) <= subBytes(temp2(23 downto 16));
-                -- next_state <= s3;
-            -- when s3 =>
-            --     shifted_key <= unsigned(shifted_key) xor rcon(1);  
+                
         end case;
     end process rk_gen_fsm;
 
@@ -71,12 +84,14 @@ begin
             roundshifted_arr <= (others=>(others => '0'));
             subByte_arr <= (others=>(others => '0'));
             rcon_arr <= (others=>(others => '0'));
+            output_vector <= (others => '0');
         elsif ( rising_edge(clock)) then
             state <= next_state;
             state <= next_state;
             roundshifted_arr <= roundshifted_arr_c;
             subByte_arr <= subByte_arr_c;
             rcon_arr <= rcon_arr_c;
+            output_vector <= output_vector_c;
         end if; 
 
     end process clock_process;
