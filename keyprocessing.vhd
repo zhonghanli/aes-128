@@ -6,6 +6,8 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity keyprocessing is
 	port(	asciikey : in std_logic_vector(7 downto 0);
 			keyormsg, read, full : in std_logic;
+			-- If keyormsg = 0, key. If keyormsg = 1, msg.
+			-- Only send key/msg if 'full' (from fifo) is 0
 			clock, reset : in std_logic;
 			cipherkey, din : out std_logic_vector(127 downto 0);
 			send_key : out std_logic;
@@ -19,11 +21,11 @@ architecture behavior of keyprocessing is
 	type state_type is (s0, s1, s2);
 	signal state, next_state : state_type;
 -- s0: waiting for sth to happen
--- s1: fill any remaining bytes (if msgkey
--- last state: output msg or key. If keyormsg = 0, key. If keyormsg = 1, msg.
+-- s1: fill any remaining bytes (if msg/key is less than 16 bytes)
+-- s2: send key/msg
 begin
+
 	key_fsm : process (asciikey, counter, tempvector)
-	
 	begin
 	-- check if key is enter: if it is, fill 0s, jump to s1
 		tempvector_c <= tempvector;
