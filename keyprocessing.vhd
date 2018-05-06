@@ -32,16 +32,22 @@ begin
 		case(state) is
 			when s0 =>
 			-- check if read is 1;
-		-- cast counter to integer before using it
-				if read and (asciikey /= X"81") then -- fill the next byte if system is ready to read and the key is not enter
-					tempvector_c((127-to_integer(to_unsigned(counter_c))) downto (127-(to_integer(to_unsigned(counter))+1)*8) <= asciikey;
-					if counter_c = "1111" then
-						next_state <= s2; -- tempvector is filled: send it
-					else
-						counter_c <= counter + 1;
+				if read
+					if (asciikey /= X"81") then -- fill the next byte if system is ready to read and the key is not enter
+						-- cast counter to integer before using it
+						tempvector_c((127-to_integer(to_unsigned(counter_c))) downto (127-(to_integer(to_unsigned(counter))+1)*8) <= asciikey;
+						if counter_c = "1111" then
+							next_state <= s2; -- tempvector_c is filled: send it
+						else
+							counter_c <= counter + 1;
+						end if;
+					else --Enter has been pressed
+						if counter_c = "1111" then
+							next_state <= s2; -- tempvector_c is filled: send it
+						else
+							next_state <= s1; -- fill tempvector_c
+						end if;
 					end if;
-				elsif (asciikey = X"81") then
-					next_state <= s1; -- 'Enter' has been pressed
 				end if;
 			when s1 => -- 'Enter' has been pressed: fill tempvector_c if counter is not 15 (i.e. tempvector is not filled with 16 bytes)
 				if counter_c /= "1111" then
@@ -61,6 +67,8 @@ begin
 					din <= tempvector;
 					wr_enable <= '1'; -- send message to data fifo
 				end if;
+				next_state <= s0;
+				counter_c <= '0';
 			when others =>
 		end case;
 	end process key_fsm;
@@ -72,7 +80,7 @@ begin
 			counter <= '0';
 			wr_enable <= '0';
 			send_key <= '0';
-			-- how do you clear cipherkey and din vectors?
+			-- how do you clear cipherkey and din vectors? Do you need to?
 		elsif(rising_edge(clock)) then
 			state <= next_state;
 			counter <= counter_c;
