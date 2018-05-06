@@ -16,8 +16,8 @@ entity keyprocessing is
 end keyboard;
 
 architecture behavior of keyprocessing is
-	signal tempvector : std_logic_vector(127 downto 0);
-	signal counter : std_logic_vector(3 downto 0);
+	signal tempvector, tempvector_c : std_logic_vector(127 downto 0);
+	signal counter, counter_c : std_logic_vector(3 downto 0);
 	type state_type is (s0, s1, s2);
 	signal state, next_state : state_type;
 -- s0: waiting for sth to happen
