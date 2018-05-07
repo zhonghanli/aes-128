@@ -1,12 +1,11 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
-USE WORK.aes_const.all;
 
 entity keyprocessing_tb is
 end entity keyprocessing_tb;
 
-architecture behavior of processing_tb is
+architecture behavior of keyprocessing_tb is
 	component keyprocessing is
 		port(
 			asciikey : in std_logic_vector(7 downto 0);
@@ -25,10 +24,10 @@ architecture behavior of processing_tb is
     constant clk_half_period : time := 1 ns;
     
     signal asciikey : std_logic_vector(7 downto 0);
-    signal keyormsg, read, full : in std_logic;
-    signal cipherkey, din : out std_logic_vector(127 downto 0);
-    signal send_key : out std_logic;
-	signal wr_enable : out std_logic;
+    signal keyormsg, read, full : std_logic;
+    signal cipherkey, din : std_logic_vector(127 downto 0);
+    signal send_key : std_logic;
+	signal wr_enable : std_logic;
 
 begin
 	dut: keyprocessing port map(asciikey, keyormsg, read, full, clock, reset, cipherkey, din, send_key, wr_enable);
@@ -36,46 +35,129 @@ begin
 	
 	test: process
 	begin
+		-- full key
 		reset <= '1';
+		wait for 2 ns;
 		reset <= '0';
 		read <= '1';
 		keyormsg <= '0'; -- key
 		asciikey <= X"45"; --E
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"45"; --E
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"43"; --C
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"53"; --S
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"20"; -- 
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"33"; --3
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"39"; --9
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"32"; --2
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"20"; -- 
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"6D"; --m
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"69"; --i
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"64"; --d
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"74"; --t
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"65"; --e
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"72"; --r
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"6D"; --m
-		wait for 5 ns;
+		wait for 2 ns;
 		asciikey <= X"81"; --Enter
-		wait for 20ns;
-
-	
+		wait for 2 ns;
+		read <= '0';
+		wait for 50ns;
+		
+		-- different key
+		reset <= '1';
+		wait for 2 ns;
+		reset <= '0';
+		read <= '1';
+		keyormsg <= '0'; -- key
+		asciikey <= X"43"; --C
+		wait for 2 ns;
+		asciikey <= X"48"; --H
+		wait for 2 ns;
+		asciikey <= X"45"; --E
+		wait for 2 ns;
+		asciikey <= X"4D"; --M
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"31"; --1
+		wait for 2 ns;
+		asciikey <= X"30"; --0
+		wait for 2 ns;
+		asciikey <= X"31"; --1
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"6D"; --m
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"64"; --d
+		wait for 2 ns;
+		asciikey <= X"74"; --t
+		wait for 2 ns;
+		asciikey <= X"65"; --e
+		wait for 2 ns;
+		asciikey <= X"72"; --r
+		wait for 2 ns;
+		asciikey <= X"6D"; --m
+		wait for 2 ns;
+		asciikey <= X"81"; --Enter
+		wait for 2 ns;
+		read <= '0';
+		wait for 200ns;
+		
+		-- partial key
+		reset <= '1';
+		wait for 2 ns;
+		reset <= '0';
+		read <= '1';
+		keyormsg <= '0'; -- key
+		asciikey <= X"45"; --E
+		wait for 2 ns;
+		asciikey <= X"45"; --E
+		wait for 2 ns;
+		asciikey <= X"43"; --C
+		wait for 2 ns;
+		asciikey <= X"53"; --S
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"33"; --3
+		wait for 2 ns;
+		asciikey <= X"39"; --9
+		wait for 2 ns;
+		asciikey <= X"32"; --2
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"6D"; --m
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"64"; --d
+		wait for 2 ns;
+		asciikey <= X"81"; --Enter
+		wait for 2 ns;
+		read <= '0';
+		wait for 200ns;
+		
+		
+		
 	end process;
 
 

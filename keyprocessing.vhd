@@ -21,11 +21,11 @@ architecture behavior of keyprocessing is
   type state_type is (s0, s1, s2);
   signal state, next_state : state_type;
 -- s0: waiting for sth to happen
--- s1: fill any remaining bytes (if msg/key is less than 16 bytes)
+-- s1: fill any remaining bytes with space bar (if msg/key is less than 16 bytes)
 -- s2: send key/msg
 begin
  
-  key_fsm : process (asciikey, counter, tempvector)
+  key_fsm : process (asciikey, counter, tempvector, state)
   begin
     tempvector_c <= tempvector;
 	counter_c <= counter;
@@ -36,7 +36,7 @@ begin
         if (read = '1') then
           if (asciikey /= X"81") then -- fill the next byte if system is ready to read and the key is not enter
             -- cast counter to integer before using it
-            tempvector_c(127-counter_c downto 127-(counter_c+1)*8) <= asciikey;
+            tempvector_c(127-counter_c*8 downto 128-(counter_c+1)*8) <= asciikey;
             if (counter_c = 15) then
               next_state <= s2; -- tempvector_c is filled: send it
             else
@@ -44,9 +44,9 @@ begin
             end if;
           else --Enter has been pressed
             if counter_c = 15 then
-                next_state <= s2; -- tempvector_c is filled: send it
+                	next_state <= s2; -- tempvector_c is filled: send it
                 else
-                  next_state <= s1; -- fill tempvector_c
+                	next_state <= s1; -- fill tempvector_c
                 end if;
               end if;
             end if;
@@ -55,7 +55,7 @@ begin
               for ii in (counter_c+1) to 15 loop -- left off here
                 -- e.g. if counter = 2, first three bytes have been filled, so fill bytes 103 downto 0
                 -- want first iteration (ii = counter+1 = 3) to be: 127-ii*8 = 103 downto 127-(ii+1)*8+1 = 96
-                tempvector_c(127-(ii*8) downto 127-(ii+1)*8+1) <= "00000000";
+                tempvector_c(127-(ii*8) downto 127-(ii+1)*8+1) <= X"20";
               end loop;
             end if;
             next_state <= s2; --tempvector_c is now filled: send it
