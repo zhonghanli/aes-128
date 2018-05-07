@@ -76,7 +76,7 @@ begin
 		asciikey <= X"81"; --Enter
 		wait for 2 ns;
 		read <= '0';
-		wait for 50ns;
+		wait for 50 ns;
 		
 		-- different key
 		reset <= '1';
@@ -119,7 +119,7 @@ begin
 		asciikey <= X"81"; --Enter
 		wait for 2 ns;
 		read <= '0';
-		wait for 200ns;
+		wait for 50 ns;
 		
 		-- partial key
 		reset <= '1';
@@ -154,9 +154,131 @@ begin
 		asciikey <= X"81"; --Enter
 		wait for 2 ns;
 		read <= '0';
-		wait for 200ns;
+		wait for 50 ns;
 		
+		-- full message - fifo is full
+		keyormsg <= '1'; -- msg
+		full <= '1';
+		reset <= '1';
+		wait for 2 ns;
+		reset <= '0';
+		read <= '1';
+		asciikey <= X"47"; --G
+		wait for 2 ns;
+		asciikey <= X"72"; --r
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"64"; --d
+		wait for 2 ns;
+		asciikey <= X"75"; --u
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"74"; --t
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"6F"; --o
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"73"; --s
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"65"; --e
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"72"; --r
+		asciikey <= X"81"; --Enter
+		wait for 2 ns;
+		read <= '0';
+		wait for 50 ns;
 		
+		-- full message - fifo is empty
+		keyormsg <= '1'; -- msg
+		full <= '0';
+		reset <= '1';
+		wait for 2 ns;
+		reset <= '0';
+		read <= '1';
+		asciikey <= X"47"; --G
+		wait for 2 ns;
+		asciikey <= X"72"; --r
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"64"; --d
+		wait for 2 ns;
+		asciikey <= X"75"; --u
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"74"; --t
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"6F"; --o
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"69"; --i
+		wait for 2 ns;
+		asciikey <= X"73"; --s
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"65"; --e
+		wait for 2 ns;
+		asciikey <= X"61"; --a
+		wait for 2 ns;
+		asciikey <= X"72"; --r
+		asciikey <= X"81"; --Enter
+		wait for 2 ns;
+		read <= '0';
+		wait for 50 ns;
+		
+		-- partial message - fifo is empty
+		keyormsg <= '1'; -- msg
+		full <= '0';
+		reset <= '1';
+		wait for 2 ns;
+		reset <= '0';
+		read <= '1';
+		asciikey <= X"4F"; --O
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"65"; --e
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"6D"; --m
+		wait for 2 ns;
+		asciikey <= X"6F"; --o
+		wait for 2 ns;
+		asciikey <= X"6E"; --n
+		wait for 2 ns;
+		asciikey <= X"74"; --t
+		wait for 2 ns;
+		asciikey <= X"68"; --h
+		wait for 2 ns;
+		asciikey <= X"20"; -- 
+		wait for 2 ns;
+		asciikey <= X"6C"; --l
+		wait for 2 ns;
+		asciikey <= X"65"; --e
+		wait for 2 ns;
+		asciikey <= X"66"; --f
+		wait for 2 ns;
+		asciikey <= X"74"; --t
+		wait for 2 ns;
+		read<= '0';
+		wait for 50 ns;
 		
 	end process;
 
