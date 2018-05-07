@@ -7,7 +7,7 @@ entity rkey_gen is
     port(
         clock : in std_logic;
         reset : in std_logic;
-        step : std_logic_vector(3 downto 0);
+        step : in std_logic_vector(3 downto 0);
         in_key: in std_logic_vector(127 downto 0);
         out_key : out std_logic_vector(127 downto 0);
         start : in std_logic;
