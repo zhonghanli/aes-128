@@ -4,10 +4,9 @@ USE IEEE.numeric_std.all;
  
 entity keyprocessing is
   port(  asciikey : in std_logic_vector(7 downto 0);
-  -- should asciikey be declared as std_logic_vector if it's written as hex value?
       keyormsg, read, full : in std_logic;
       -- If keyormsg = 0, key. If keyormsg = 1, msg.
-      -- Only send key/msg if 'full' (from fifo) is 0
+      -- Only send msg if 'full' (from fifo) is 0
       clock, reset : in std_logic;
       cipherkey, din : out std_logic_vector(127 downto 0);
       send_key : out std_logic;
