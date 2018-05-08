@@ -194,6 +194,7 @@ begin
 		asciikey <= X"61"; --a
 		wait for 2 ns;
 		asciikey <= X"72"; --r
+		wait for 2 ns;
 		asciikey <= X"81"; --Enter
 		wait for 2 ns;
 		read <= '0';
@@ -237,6 +238,7 @@ begin
 		asciikey <= X"61"; --a
 		wait for 2 ns;
 		asciikey <= X"72"; --r
+		wait for 2 ns;
 		asciikey <= X"81"; --Enter
 		wait for 2 ns;
 		read <= '0';

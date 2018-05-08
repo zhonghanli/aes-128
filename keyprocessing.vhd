@@ -52,7 +52,7 @@ begin
             end if;
           when s1 => -- 'Enter' has been pressed: fill tempvector_c if counter is not 15 (i.e. tempvector is not filled with 16 bytes)
             if counter_c /= 15 then
-              for ii in (counter_c+1) to 15 loop -- left off here
+              for ii in (counter_c) to 15 loop -- left off here
                 -- e.g. if counter = 2, first three bytes have been filled, so fill bytes 103 downto 0
                 -- want first iteration (ii = counter+1 = 3) to be: 127-ii*8 = 103 downto 127-(ii+1)*8+1 = 96
                 tempvector_c(127-(ii*8) downto 127-(ii+1)*8+1) <= X"20";
