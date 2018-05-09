@@ -45,10 +45,9 @@ begin
         subByte_arr_c <= subByte_arr;
         roundShift_arr_c <= roundShift_arr;
         mixColumns_arr_c <= mixColumns_arr;
-
+        done <= '0';
         case state is
             when s0 =>
-                done <= '0';
                 if start = '1' and step = "0000" then
                     next_state <= s5;
                 elsif start = '1' then 
