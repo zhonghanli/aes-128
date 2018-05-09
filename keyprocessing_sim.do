@@ -12,11 +12,13 @@ add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/read
 add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/keyormsg
 add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/counter_c
 add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/full
-add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/asciikey
-add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/wr_enable
-add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/din
-add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/send_key
 
+add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/asciikey
+
+add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/wr_enable
+add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/din
+
+add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/send_key
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/cipherkey
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/tempvector_c
 

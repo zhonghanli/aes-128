@@ -9,7 +9,7 @@ entity keyprocessing is
       -- Only send msg if 'full' (from fifo) is 0
       clock, reset : in std_logic;
       cipherkey, din : out std_logic_vector(127 downto 0);
-      send_key : out std_logic;
+      send_key_out : out std_logic;
       wr_enable : out std_logic
   );
 end keyprocessing;
@@ -17,6 +17,7 @@ end keyprocessing;
 architecture behavior of keyprocessing is
   signal tempvector, tempvector_c : std_logic_vector(127 downto 0);
   -- signal counter, counter_c : std_logic_vector(3 downto 0);
+  signal cipherkey_c, cipherkey_t, din_c din_t : std_logic;
   signal counter, counter_c : integer range 0 to 15;
   type state_type is (s0, s1, s2);
   signal state, next_state : state_type;
@@ -25,11 +26,15 @@ architecture behavior of keyprocessing is
 -- s2: send key/msg
 begin
  
-  key_fsm : process (asciikey, counter, tempvector, state)
+  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t)
   begin
     tempvector_c <= tempvector;
 	counter_c <= counter;
     next_state <= state;
+    send_key_c <= '0';
+    wr_enable <= '0';
+    cipherkey_c <= cipherkey_t;
+    din_c <= din_t;
     case(state) is
       when s0 =>
       -- check if read is 1;
@@ -62,15 +67,16 @@ begin
           when s2 => -- assign tempvector_c to cipherkey or message
           --If keyormsg = 0, key. If keyormsg = 1, msg.
             if keyormsg = '0' then
-              cipherkey <= tempvector;
-              send_key <= '1'; -- send key to processor
+              cipherkey_c <= tempvector;
+              send_key_c <= '1'; -- send key to processor
             elsif keyormsg = '1' and full = '0' then
-              din <= tempvector;
+              din_c <= tempvector;
               wr_enable <= '1'; -- send message to data fifo
             end if;
             next_state <= s0;
             counter_c <= 0;
           when others =>
+          	send_key_c <= (others => 'X');
         end case;
       end process key_fsm;
 
@@ -80,17 +86,21 @@ begin
     if (reset = '1') then
       state <= s0;
       counter <= 0;
-      wr_enable <= '0';
+      tempvector <= (others => '0');
       send_key <= '0';
-      -- how do you clear cipherkey and din vectors? Do you need to?
+      din_t <= (others => '0');
+      cipherkey_t <= (others => '0');
     elsif(rising_edge(clock)) then
       state <= next_state;
       counter <= counter_c;
       tempvector <= tempvector_c;
-      send_key <= '0';
-      wr_enable <= '0';
+      send_key <= send_key_c;
+      cipherkey_t <= cipherkey_c;
     end if;
   end process;
+ 
+ cipherkey <= cipherkey_t;
+ din <= din_t;
  
 end behavior;
 
