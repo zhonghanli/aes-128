@@ -66,8 +66,10 @@ begin
         end generate other_steps;
     end generate gen_aes128_steps;
 
-    ready_process: process(input_fifo_empty, start_vector(11), output_vector(10), output_fifo_full)
+    ready_process: process(input_fifo_empty, start_vector(11), output_vector(10), output_fifo_full, reset)
     begin
+        start_vector(0) <= '0';
+
         case ready is
             when '1' =>
                 ready <= '0';
@@ -76,7 +78,7 @@ begin
                     start_vector(0) <= '1' ;
                     rd_en <= '1';
                 else
-                    start_vector(0) <= '1';
+                    start_vector(0) <= '0';
                     rd_en <= '0';
                 end if;
             when '0' =>
