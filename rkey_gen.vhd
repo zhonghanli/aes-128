@@ -42,10 +42,10 @@ begin
         roundshifted_arr_c <= roundshifted_arr;
         subByte_arr_c <= subByte_arr;
         rcon_arr_c <= rcon_arr;
+        done <= '0';
 
         case(state) is
             when s0 => 
-                done <= '0';
                 roundshifted_arr_c <= in_key_arr(2 downto 0) & in_key_arr(3);
                 if start = '1' then
                     next_state <= s1;

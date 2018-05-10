@@ -39,10 +39,10 @@ begin
         reset <= '1';
         cipher_key <= X"5468617473206D79204B756E67204675";
         start <= '0';
-        wait for 1 ns;
+        wait for 2 ns;
         start <= '1';
         reset <= '0';
-        wait for 1 ns;
+        wait for 2 ns;
         start <= '0';
 
         wait for 500 ns;

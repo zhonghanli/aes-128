@@ -17,7 +17,7 @@ entity aes128_step is
 end entity aes128_step;
 
 architecture behavior of aes128_step is
-    type state_type is (s0, s1, s2, s3, s4, s5);
+    type state_type is (s0, s1, s2, s3, s4);
     signal state, next_state : state_type;
 
     type std_array is array(Natural range <>) of std_logic_vector(7 downto 0);
@@ -26,6 +26,8 @@ architecture behavior of aes128_step is
     signal subByte_arr, subByte_arr_c : std_array(15 downto 0);
     signal roundShift_arr, roundShift_arr_c : std_array(15 downto 0);
     signal mixColumns_arr, mixColumns_arr_c : std_array(15 downto 0);
+
+    --signal done_c : std_logic;
 
 
 begin
@@ -49,7 +51,9 @@ begin
         case state is
             when s0 =>
                 if start = '1' and step = "0000" then
-                    next_state <= s5;
+                    out_vector <= in_vector xor roundkey;
+                    done <= '1';
+                    next_state <= s0;   
                 elsif start = '1' then 
                     init_arr_c <= in_vector_arr;
                     next_state <= s1;
@@ -105,16 +109,17 @@ begin
                 end loop;
                 next_state <= s4;
             when s4 =>
-                for i in 15 downto 0 loop
-                    out_vector(127-i*8 downto 128-(i+1)*8) <= mixColumns_arr(15-i) xor roundkey_arr(15-i);
-                end loop;
+                if step = "1010" then
+                    for i in 15 downto 0 loop
+                        out_vector(127-i*8 downto 128-(i+1)*8) <= roundShift_arr(15-i) xor roundkey_arr(15-i);
+                    end loop;
+                else
+                    for i in 15 downto 0 loop
+                        out_vector(127-i*8 downto 128-(i+1)*8) <= mixColumns_arr(15-i) xor roundkey_arr(15-i);
+                    end loop;
+                end if;
                 done <= '1';                       
-                next_state <= s0;
-            when s5 =>            
-                out_vector <= in_vector xor roundkey;
-                done <= '1';
-                next_state <= s0;           
-                
+                next_state <= s0;                      
             when others =>
                 next_state <= s0;
         end case;
