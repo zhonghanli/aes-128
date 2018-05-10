@@ -15,10 +15,10 @@ add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/full
 
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/asciikey
 
-add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/wr_enable
+add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/wr_enable_out
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/din
 
-add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/send_key
+add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/dut/send_key_out
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/cipherkey
 add wave -noupdate -group keyprocessing_tb -radix ASCII /keyprocessing_tb/dut/tempvector_c
 

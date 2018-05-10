@@ -10,14 +10,15 @@ entity keyprocessing is
       clock, reset : in std_logic;
       cipherkey, din : out std_logic_vector(127 downto 0);
       send_key_out : out std_logic;
-      wr_enable : out std_logic
+      wr_enable_out : out std_logic
   );
 end keyprocessing;
  
 architecture behavior of keyprocessing is
   signal tempvector, tempvector_c : std_logic_vector(127 downto 0);
   -- signal counter, counter_c : std_logic_vector(3 downto 0);
-  signal cipherkey_c, cipherkey_t, din_c din_t : std_logic;
+  signal cipherkey_c, cipherkey_t, din_c, din_t : std_logic_vector(127 downto 0);
+  signal send_key, wr_enable, send_key_c, wr_enable_c : std_logic;
   signal counter, counter_c : integer range 0 to 15;
   type state_type is (s0, s1, s2);
   signal state, next_state : state_type;
@@ -32,7 +33,7 @@ begin
 	counter_c <= counter;
     next_state <= state;
     send_key_c <= '0';
-    wr_enable <= '0';
+    wr_enable_c <= '0';
     cipherkey_c <= cipherkey_t;
     din_c <= din_t;
     case(state) is
@@ -71,12 +72,12 @@ begin
               send_key_c <= '1'; -- send key to processor
             elsif keyormsg = '1' and full = '0' then
               din_c <= tempvector;
-              wr_enable <= '1'; -- send message to data fifo
+              wr_enable_c <= '1'; -- send message to data fifo
             end if;
             next_state <= s0;
             counter_c <= 0;
           when others =>
-          	send_key_c <= (others => 'X');
+          	send_key_c <= 'X';
         end case;
       end process key_fsm;
 
@@ -88,6 +89,7 @@ begin
       counter <= 0;
       tempvector <= (others => '0');
       send_key <= '0';
+      wr_enable <= '0';
       din_t <= (others => '0');
       cipherkey_t <= (others => '0');
     elsif(rising_edge(clock)) then
@@ -95,12 +97,17 @@ begin
       counter <= counter_c;
       tempvector <= tempvector_c;
       send_key <= send_key_c;
+      wr_enable <= wr_enable_c;
       cipherkey_t <= cipherkey_c;
+      din_t <= din_c;
     end if;
   end process;
  
  cipherkey <= cipherkey_t;
  din <= din_t;
+ send_key_out <= send_key;
+ wr_enable_out <= wr_enable;
+ 
  
 end behavior;
 

@@ -14,8 +14,8 @@ architecture behavior of keyprocessing_tb is
 		  -- Only send msg if 'full' (from fifo) is 0
 		  clock, reset : in std_logic;
 		  cipherkey, din : out std_logic_vector(127 downto 0);
-		  send_key : out std_logic;
-		  wr_enable : out std_logic
+		  send_key_out : out std_logic;
+		  wr_enable_out : out std_logic
 		);
 	end component keyprocessing;
 	
@@ -26,15 +26,16 @@ architecture behavior of keyprocessing_tb is
     signal asciikey : std_logic_vector(7 downto 0);
     signal keyormsg, read, full : std_logic;
     signal cipherkey, din : std_logic_vector(127 downto 0);
-    signal send_key : std_logic;
-	signal wr_enable : std_logic;
+    signal send_key_out : std_logic;
+	signal wr_enable_out : std_logic;
 
 begin
-	dut: keyprocessing port map(asciikey, keyormsg, read, full, clock, reset, cipherkey, din, send_key, wr_enable);
+	dut: keyprocessing port map(asciikey, keyormsg, read, full, clock, reset, cipherkey, din, send_key_out, wr_enable_out);
 	clock <= not clock after clk_half_period;
 	
 	test: process
 	begin
+	full <= '0';
 		-- full key
 		reset <= '1';
 		wait for 2 ns;
@@ -279,7 +280,9 @@ begin
 		wait for 2 ns;
 		asciikey <= X"74"; --t
 		wait for 2 ns;
-		read<= '0';
+		asciikey <= X"81"; --Enter
+		wait for 2 ns;
+		read <= '0';
 		wait for 50 ns;
 		
 	end process;
