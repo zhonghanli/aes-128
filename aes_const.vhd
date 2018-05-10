@@ -4,6 +4,19 @@ use IEEE.numeric_std.all;
 
 package aes_const is
     type rijndael_vector is array(255 downto 0) of std_logic_vector(7 downto 0);
+    type quadword_arr is array (natural range <>) of std_logic_vector(127 downto 0);
+    type fourbit_arr is array (natural range <>) of std_logic_vector(3 downto 0);
+    type byte_arr is array(natural range <>) of std_logic_vector(7 downto 0);
+
+    constant mixcol_const : byte_arr(15 downto 0) :=(
+        x"02",x"01",x"01", x"03",x"03",x"02",x"01",x"01",x"01",x"03",x"02",x"01",x"01",x"01",x"03",x"02"
+    );
+
+
+	constant step_arr_const : fourbit_arr(0 to 11) :=(
+        X"0",X"1",X"2",X"3",X"4",X"5",X"6",X"7",X"8",X"9",X"A", X"B"
+    );
+
     constant sbox : rijndael_vector := (
         X"63", X"7C", X"77", X"7B", X"F2", X"6B", X"6F", X"C5", X"30", X"01", X"67", X"2B", X"FE", X"D7", X"AB", X"76", 
         X"CA", X"82", X"C9", X"7D", X"FA", X"59", X"47", X"F0", X"AD", X"D4", X"A2", X"AF", X"9C", X"A4", X"72", X"C0", 
@@ -45,10 +58,17 @@ package aes_const is
 
 
 
+
     function subBytes(x : std_logic_vector(7 downto 0))
+        return std_logic_vector;
+    
+    function mult(x,y : std_logic_vector(7 downto 0))
         return std_logic_vector;
         
     end aes_const;
+
+
+
 
     package body aes_const is
 
@@ -64,5 +84,32 @@ package aes_const is
         ret(7 downto 0) := sbox(pos);
         return ret;
     end subBytes;
+
+
+    function mult(x,y : std_logic_vector(7 downto 0))
+            return std_logic_vector is
+        variable result : std_logic_vector(7 downto 0) := "00000000";
+    begin 
+        case y is
+            when x"01" =>
+                result := x;
+            when x"02" =>
+                --galois field
+                if x(7) = '1' then
+                    result := std_logic_vector(unsigned(x(6 downto 0) & '0') xor "00011011");
+                else
+                    result := x(6 downto 0) & '0';
+                end if;
+            when x"03" =>
+                if x(7) = '1' then
+                    result := std_logic_vector(unsigned(x(6 downto 0) & '0') xor "00011011" xor unsigned(x));
+                else         
+                    result := std_logic_vector((unsigned(x) sll 1) xor unsigned(x));
+                end if;
+            when others =>
+                result := x;
+        end case;
+        return result;
+    end mult;
 
     end package body aes_const;
