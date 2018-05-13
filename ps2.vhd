@@ -8,6 +8,7 @@ entity ps2 is
 			reset : in std_logic;--, read : in std_logic;
 			scan_code : out std_logic_vector( 7 downto 0 );
 			scan_readyo : out std_logic;
+			flat : out std_logic;
 			hist3 : out std_logic_vector(7 downto 0);
 			hist2 : out std_logic_vector(7 downto 0);
 			hist1 : out std_logic_vector(7 downto 0);
@@ -40,7 +41,6 @@ signal history2 : std_logic_vector(7 downto 0);
 signal history1 : std_logic_vector(7 downto 0);
 signal history0 : std_logic_vector(7 downto 0);
 signal read : std_logic;
-signal flag : std_logic;
 signal key : std_logic_vector(7 downto 0);
 signal tempkey : std_logic_vector(7 downto 0);
 
