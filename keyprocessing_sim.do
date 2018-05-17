@@ -3,7 +3,7 @@ vlib work
 vcom -work work "keyprocessing.vhd"
 vcom -work work "keyprocessing_tb.vhd"
 
-vsim +notimingchecks -L work work.keyprocessing_tb -wlf rkey_gen_sim.wlf
+vsim +notimingchecks -L work work.keyprocessing_tb -wlf ps2_sim.wlf
 
 add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/clock
 add wave -noupdate -group keyprocessing_tb /keyprocessing_tb/reset
