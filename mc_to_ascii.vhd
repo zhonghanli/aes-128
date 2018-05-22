@@ -53,7 +53,7 @@ begin
 -- 	end if;
 -- end process a1;
 
-clocked_process : process(reset,clock,hist0,hist1,sent)
+clocked_process : process(reset,clock,hist0,hist1,hist2,sent)
 begin
 	if (reset = '1') then
 		flag <= '0';
@@ -69,7 +69,7 @@ begin
 			flag <= '1'; -- tells mc_to_ascii to look at hist0
 			sent <= '1';
 			makecode <= hist0;
-			if (hist2 = X"12") then -- Shift key also released: use capital letter
+			if (hist2 = X"12") or (hist2 = X"59") then -- Shift key also released: use capital letter
 				case(hist0) is
 					when X"0E" =>
 						asciikey <= X"60";
@@ -208,6 +208,146 @@ begin
 					when others => 
 						asciikey <= X"00";
 				end case;
+			elsif ((hist0 = X"12") or (hist0 = X"59")) and (hist2 /= X"12") and (hist2 /= X"59") then
+			-- Another capital letter case, but where shift key was released first
+				case(hist2) is
+					when X"0E" =>
+						asciikey <= X"60";
+					when X"16" =>
+						asciikey <= X"31";
+					when X"1E" =>
+						asciikey <= X"32";
+					when X"26" =>
+						asciikey <= X"33";
+					when X"25" =>
+						asciikey <= X"34";
+					when X"2E" =>
+						asciikey <= X"35";
+					when X"36" =>
+						asciikey <= X"36";
+					when X"3D" =>
+						asciikey <= X"37";
+					when X"3E" =>
+						asciikey <= X"38";
+					when X"46" =>
+						asciikey <= X"39";
+					when X"45" =>
+						asciikey <= X"30";
+					when X"4E" =>
+						asciikey <= X"2D";
+					when X"55" =>
+						asciikey <= X"3D";
+					when X"66" =>
+						asciikey <= X"08";
+					when X"0D" =>
+						asciikey <= X"09"; --'horizontal tab'
+					when X"15" => --Q
+						asciikey <= X"51";
+					when X"1D" => --W
+						asciikey <= X"57";
+					when X"24" => --E
+						asciikey <= X"45";
+					when X"2D" => --R
+						asciikey <= X"52";
+					when X"2C" => --T
+						asciikey <= X"54";
+					when X"35" => --Y
+						asciikey <= X"59";
+					when X"3C" => --U
+						asciikey <= X"55";
+					when X"43" => --I
+						asciikey <= X"49";
+					when X"44" => --O
+						asciikey <= X"4F";
+					when X"4D" => --P
+						asciikey <= X"50";
+					when X"54" => --[
+						asciikey <= X"5B";
+					when X"5B" => --]
+						asciikey <= X"5D";
+					when X"5D" => --\
+						asciikey <= X"5C";
+					when X"58" => --Caps lock
+						asciikey <= X"80";
+					when X"1C" => --A
+						asciikey <= X"41";
+					when X"1B" => --S
+						asciikey <= X"53";
+					when X"23" => --D
+						asciikey <= X"44";
+					when X"2B" => --F
+						asciikey <= X"46";
+					when X"34" => --G
+						asciikey <= X"47";
+					when X"33" => --H
+						asciikey <= X"48";
+					when X"3B" => --J
+						asciikey <= X"4A";
+					when X"42" => --K
+						asciikey <= X"4B";
+					when X"4B" => --L
+						asciikey <= X"4C";
+					when X"4C" => --;
+						asciikey <= X"3B";
+					when X"52" => --'
+						asciikey <= X"27";
+					when X"5A" => --Enter
+						asciikey <= X"81";
+					when X"12" => --Left shift
+						asciikey <= X"82";
+					when X"1A" => --Z
+						asciikey <= X"5A";
+					when X"22" => --X
+						asciikey <= X"58";
+					when X"21" => --C
+						asciikey <= X"43";
+					when X"2A" => --V
+						asciikey <= X"56";
+					when X"32" => --B
+						asciikey <= X"42";
+					when X"31" => --N
+						asciikey <= X"4E";
+					when X"3A" => --M
+						asciikey <= X"4D";
+					when X"41" => --,
+						asciikey <= X"41";
+					when X"49" => --.
+						asciikey <= X"49";
+					when X"4A" => --/
+						asciikey <= X"4A";
+					when X"59" => --Right shift
+						asciikey <= X"83";
+					when X"14" => --Left ctl
+						asciikey <= X"84";
+					when X"11" => --Left alt
+						asciikey <= X"85";
+					when X"29" => --Space bar
+						asciikey <= X"20";
+					when X"70" => --0
+						asciikey <= X"30";
+					when X"71" => --.
+						asciikey <= X"2E";
+					when X"69" => --1
+						asciikey <= X"31";
+					when X"72" => --2
+						asciikey <= X"32";
+					when X"7A" => --3
+						asciikey <= X"33";
+					when X"6B" => --4
+						asciikey <= X"34";
+					when X"73" => --5
+						asciikey <= X"35";
+					when X"74" => --6
+						asciikey <= X"36";
+					when X"6C" => --7
+						asciikey <= X"37";
+					when X"75" => --8
+						asciikey <= X"38";
+					when X"7D" => --9
+						asciikey <= X"39";
+					when others => 
+						asciikey <= X"00";
+					end case;
 			else
 				case(hist0) is
 					when X"0E" =>
