@@ -26,7 +26,7 @@ begin
         end if; 
     end process clock_process;
 
-    fsm_process : process(nextd, fifo_empty, state)
+    fsm_process : process(nextd, fifo_empty, state, din)
     begin
         rd_en <= '0';
         case state is

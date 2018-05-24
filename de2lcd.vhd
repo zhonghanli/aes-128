@@ -2,15 +2,15 @@ LIBRARY IEEE;
 USE  IEEE.STD_LOGIC_1164.all;
 USE  IEEE.STD_LOGIC_ARITH.all;
 USE  IEEE.STD_LOGIC_UNSIGNED.all;
+USE WORK.aes_const.all;
 
 ENTITY de2lcd IS
 	PORT(reset, clk_50Mhz				: IN	STD_LOGIC;
 		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
 		 LCD_RW						: BUFFER STD_LOGIC;
 		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
-		 fifo_data : in std_logic_vector(127 downto 0);
-		 fifo_empty : in std_logic;
-		 rd_en: in std_logic
+		 data : in std_logic_vector(127 downto 0)
+
 		 );
 		 
 END de2lcd;
@@ -131,7 +131,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"45";
+						DATA_BUS_VALUE <= hex2ascii(data(127 downto 124));
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR2;
 -- Write ASCII hex character in second LCD character location
@@ -139,7 +139,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"45";
+						DATA_BUS_VALUE <= hex2ascii(data(123 downto 120));
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR3;
 -- Write ASCII hex character in third LCD character location
@@ -147,7 +147,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"43";
+						DATA_BUS_VALUE <= hex2ascii(data(119 downto 116));
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR4;
 -- Write ASCII hex character in fourth LCD character location
@@ -155,7 +155,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"53";
+						DATA_BUS_VALUE <= hex2ascii(data(115 downto 112));
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR5;
 -- Write ASCII hex character in fifth LCD character location

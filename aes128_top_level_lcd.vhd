@@ -3,7 +3,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 USE WORK.aes_const.all;
 
-entity aes128_top_level is
+entity aes128_top_level_lcd is
     port(
         signal clock : in std_logic;
         signal reset : in std_logic;
@@ -21,9 +21,9 @@ entity aes128_top_level is
 
         signal nextd : in std_logic
     );
-end entity aes128_top_level;
+end entity aes128_top_level_lcd;
 
-architecture structural of aes128_top_level is
+architecture structural of aes128_top_level_lcd is
     component ps2 is
         port( 	keyboard_clk, keyboard_data, clock_50MHz ,
                 reset : in std_logic;--, read : in std_logic;
