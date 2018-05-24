@@ -17,7 +17,9 @@ entity aes128_top_level is
         signal RESET_LED : out std_logic;
         signal SEC_LED : out std_logic;
         signal LCD_RW : buffer std_logic;
-        signal DATA_BUS: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0)
+        signal DATA_BUS: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
+
+        signal nextd : in std_logic
     );
 end entity aes128_top_level;
 
@@ -105,12 +107,20 @@ architecture structural of aes128_top_level is
 		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
 		 LCD_RW						: BUFFER STD_LOGIC;
 		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
-		 fifo_data : in std_logic_vector(127 downto 0);
-		 fifo_empty : in std_logic;
-		 rd_en: in std_logic
+         data : in std_logic_vector(127 downto 0)
 		 );
 		 
     END component de2lcd;
+
+    component output_control is
+        port(
+            clock, reset, nextd : in std_logic;
+            fifo_empty : in std_logic;
+            din: in std_logic_vector(127 downto 0);
+            rd_en : out std_logic;
+            dout : out std_logic_vector(127 downto 0)
+        );
+    end component output_control;
 
     signal scan_code, hist3, hist2, hist1, hist0 : std_logic_vector(7 downto 0);
     signal scan_readyo, mc2asciiread: std_logic;
@@ -119,7 +129,7 @@ architecture structural of aes128_top_level is
     signal cipherkey, din, dout_fifo : std_logic_vector(127 downto 0);
     signal keyset: quadword_arr(0 to 10);
     signal full2, wr_en2, rd_en2, empty2: std_logic;
-    signal message_out, lcd_message: std_logic_vector(127 downto 0);
+    signal message_out, lcd_message, lcd_message_final: std_logic_vector(127 downto 0);
 
 begin
     ps2_component: ps2 port map(keyboard_clk, keyboard_data, clock, reset, scan_code, scan_readyo, hist3, hist2, hist1, hist0);
@@ -129,6 +139,7 @@ begin
     data2aes_fifo: fifo port map(clock,clock, reset, rd_en1, wr_en1, din, dout_fifo, full1, empty1);
     aes128_full_component: aes128_full port map(clock, reset, full1, dout_fifo, rd_en1, keyset, empty1, message_out, wr_en2);
     full2lcd_fifo: fifo port map(clock, clock, reset, rd_en2, wr_en2, message_out, lcd_message, full2, empty2);
-    lcdde: de2lcd port map(reset, clock, LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED, LCD_RW, DATA_BUS, lcd_message, empty2, rd_en2);
+    output_ctrl : output_control port map(clock, reset, nextd, empty2, lcd_message, rd_en2, lcd_message_final);
+    lcdde: de2lcd port map(reset, clock, LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED, LCD_RW, DATA_BUS, lcd_message_final);
 
 end architecture structural;
