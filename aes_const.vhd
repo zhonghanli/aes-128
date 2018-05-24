@@ -64,6 +64,9 @@ package aes_const is
     
     function mult(x,y : std_logic_vector(7 downto 0))
         return std_logic_vector;
+
+    function hex2ascii(x : std_logic_vector(3 downto 0))
+        return std_logic_vector;
         
     end aes_const;
 
@@ -111,5 +114,49 @@ package aes_const is
         end case;
         return result;
     end mult;
+
+    function hex2ascii(x : std_logic_vector(3 downto 0))
+                    return std_logic_vector is
+        variable result : std_logic_vector(7 downto 0) := "00000000";
+    begin
+        case x is
+            when x"0" => 
+                result := x"30";
+            when x"1" =>
+                result := x"31";
+            when x"2" =>
+                result := x"32";
+            when x"3" =>
+                result := x"33";
+            when x"4" =>
+                result := x"34";
+            when x"5" =>
+                result := x"35";
+            when x"6" =>
+                result := x"36";
+            when x"7" =>
+                result := x"37";
+            when x"8" =>
+                result := x"38";
+            when x"9" =>
+                result := x"39";
+            when x"A" =>
+                result := x"41";
+            when x"B" =>
+                result := x"42";
+            when x"C" =>
+                result := x"43";
+            when x"D" =>
+                result := x"44";
+            when x"E" =>
+                result := x"45";
+            when x"F" =>
+                result := x"46";
+            when others =>
+                result := x"00";
+        end case;
+        return result;
+
+    end hex2ascii;
 
     end package body aes_const;

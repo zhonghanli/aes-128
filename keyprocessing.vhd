@@ -27,7 +27,7 @@ architecture behavior of keyprocessing is
 -- s2: send key/msg
 begin
  
-  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t)
+  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t, read, keyormsg, full)
   begin
     tempvector_c <= tempvector;
 	counter_c <= counter;
@@ -42,14 +42,14 @@ begin
         if (read = '1') then
           if (asciikey /= X"81") then -- fill the next byte if system is ready to read and the key is not enter
             -- cast counter to integer before using it
-            tempvector_c(127-counter_c*8 downto 128-(counter_c+1)*8) <= asciikey;
-            if (counter_c = 15) then
+            tempvector_c(127-counter*8 downto 128-(counter+1)*8) <= asciikey;
+            if (counter = 15) then
               next_state <= s2; -- tempvector_c is filled: send it
             else
               counter_c <= counter + 1;
             end if;
           else --Enter has been pressed
-            if counter_c = 15 then
+            if counter = 15 then
                 	next_state <= s2; -- tempvector_c is filled: send it
                 else
                 	next_state <= s1; -- fill tempvector_c
@@ -57,11 +57,13 @@ begin
               end if;
             end if;
           when s1 => -- 'Enter' has been pressed: fill tempvector_c if counter is not 15 (i.e. tempvector is not filled with 16 bytes)
-            if counter_c /= 15 then
-              for ii in (counter_c) to 15 loop -- left off here
+            if counter /= 15 then
+              for ii in 0 to 15 loop -- left off here
                 -- e.g. if counter = 2, first three bytes have been filled, so fill bytes 103 downto 0
                 -- want first iteration (ii = counter+1 = 3) to be: 127-ii*8 = 103 downto 127-(ii+1)*8+1 = 96
-                tempvector_c(127-(ii*8) downto 127-(ii+1)*8+1) <= X"20";
+					 if (ii >= counter) then
+						tempvector_c(127-(ii*8) downto 127-(ii+1)*8+1) <= X"20";
+					 end if;
               end loop;
             end if;
             next_state <= s2; --tempvector_c is now filled: send it

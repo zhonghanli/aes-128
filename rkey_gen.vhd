@@ -35,7 +35,7 @@ begin
         end loop;
     end process in_key_update;
 
-    rk_gen_fsm: process(in_key, in_key_arr, state, roundshifted_arr, subByte_arr, rcon_arr, start)
+    rk_gen_fsm: process(in_key, in_key_arr, state, roundshifted_arr, subByte_arr, rcon_arr, start, step)
         variable temp_out : std_logic_vector(127 downto 0);
 
     begin
@@ -43,6 +43,8 @@ begin
         subByte_arr_c <= subByte_arr;
         rcon_arr_c <= rcon_arr;
         done <= '0';
+		  temp_out := (others => '0');
+		  out_key <= (others => '0');
 
         case(state) is
             when s0 => 

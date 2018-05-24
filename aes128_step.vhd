@@ -39,7 +39,7 @@ begin
         end loop;
     end process input_update;
 
-    aes128_step_fsm : process(start,in_vector, roundkey, in_vector_arr, roundkey_arr, state, subByte_arr, roundShift_arr, mixColumns_arr)
+    aes128_step_fsm : process(start,in_vector, roundkey, in_vector_arr, roundkey_arr, state, subByte_arr, roundShift_arr, mixColumns_arr, init_arr, step)
             --variable transpose_arr, temp_rshift : std_array(15 downto 0);
             variable products : std_array(0 to 3);
     begin
@@ -48,6 +48,7 @@ begin
         roundShift_arr_c <= roundShift_arr;
         mixColumns_arr_c <= mixColumns_arr;
         done <= '0';
+		  out_vector<= (others=> '0');
         case state is
             when s0 =>
                 if start = '1' and step = "0000" then

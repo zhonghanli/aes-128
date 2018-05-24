@@ -7,13 +7,18 @@ ENTITY de2lcd IS
 	PORT(reset, clk_50Mhz				: IN	STD_LOGIC;
 		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
 		 LCD_RW						: BUFFER STD_LOGIC;
-		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0));
+		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
+		 fifo_data : in std_logic_vector(127 downto 0);
+		 fifo_empty : in std_logic;
+		 rd_en: in std_logic
+		 );
+		 
 END de2lcd;
 
 ARCHITECTURE a OF de2lcd IS
 	TYPE STATE_TYPE IS (HOLD, FUNC_SET, DISPLAY_ON, MODE_SET, WRITE_CHAR1,
 	WRITE_CHAR2,WRITE_CHAR3,WRITE_CHAR4,WRITE_CHAR5,WRITE_CHAR6,WRITE_CHAR7,
-	WRITE_CHAR8, WRITE_CHAR9, WRITE_CHAR10, RETURN_HOME, TOGGLE_E, RESET1, RESET2, 
+	WRITE_CHAR8, WRITE_CHAR9, WRITE_CHAR10,WRITE_CHAR11, WRITE_CHAR12,WRITE_CHAR13, WRITE_CHAR14, WRITE_CHAR15, WRITE_CHAR16, RETURN_HOME, TOGGLE_E, RESET1, RESET2, 
 	RESET3, DISPLAY_OFF, DISPLAY_CLEAR);
 	SIGNAL state, next_command: STATE_TYPE;
 	SIGNAL DATA_BUS_VALUE: STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -197,7 +202,50 @@ BEGIN
 						LCD_RW <= '0';
 						DATA_BUS_VALUE <= X"6e";
 						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR11;
+				WHEN WRITE_CHAR11 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR12;
+				WHEN WRITE_CHAR12 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR13;
+				WHEN WRITE_CHAR13 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR14;
+				WHEN WRITE_CHAR14 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR15;
+				WHEN WRITE_CHAR15 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR16;
+				WHEN WRITE_CHAR16 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
 						next_command <= RETURN_HOME;
+
 
 -- Return write address to first character postion
 				WHEN RETURN_HOME =>

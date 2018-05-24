@@ -3,21 +3,25 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 USE WORK.aes_const.all;
 
-entity aes128_top_level_lcd is
+entity aes128_top_level is
     port(
         signal clock : in std_logic;
         signal reset : in std_logic;
         signal keyormsg : in std_logic;
         signal keyboard_clk : in std_logic;
         signal keyboard_data : in std_logic;
-        signal output_fifo_full : in std_logic;
-        signal wr_en : out std_logic;
-        signal dout : out std_logic_vector(127 downto 0)
 
+        signal LCD_RS : out std_logic;
+        signal LCD_E : out std_logic;
+        signal LCD_ON : out std_logic;
+        signal RESET_LED : out std_logic;
+        signal SEC_LED : out std_logic;
+        signal LCD_RW : buffer std_logic;
+        signal DATA_BUS: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
-end entity aes128_top_level_lcd;
+end entity aes128_top_level;
 
-architecture structural of aes128_top_level_lcd is
+architecture structural of aes128_top_level is
     component ps2 is
         port( 	keyboard_clk, keyboard_data, clock_50MHz ,
                 reset : in std_logic;--, read : in std_logic;
@@ -96,19 +100,35 @@ architecture structural of aes128_top_level_lcd is
         );
     end component keyexpansion;
 
+    component de2lcd IS
+	PORT(reset, clk_50Mhz				: IN	STD_LOGIC;
+		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
+		 LCD_RW						: BUFFER STD_LOGIC;
+		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
+		 fifo_data : in std_logic_vector(127 downto 0);
+		 fifo_empty : in std_logic;
+		 rd_en: in std_logic
+		 );
+		 
+    END component de2lcd;
+
     signal scan_code, hist3, hist2, hist1, hist0 : std_logic_vector(7 downto 0);
-    signal scan_readyo : std_logic;
-    signal mc2asciiread: std_logic;
+    signal scan_readyo, mc2asciiread: std_logic;
     signal full1, empty1, send1, wr_en1, rd_en1: std_logic;
     signal asciikey : std_logic_vector(7 downto 0);
     signal cipherkey, din, dout_fifo : std_logic_vector(127 downto 0);
     signal keyset: quadword_arr(0 to 10);
+    signal full2, wr_en2, rd_en2, empty2: std_logic;
+    signal message_out, lcd_message: std_logic_vector(127 downto 0);
+
 begin
     ps2_component: ps2 port map(keyboard_clk, keyboard_data, clock, reset, scan_code, scan_readyo, hist3, hist2, hist1, hist0);
     mc_to_ascii_component: mc_to_ascii port map(clock, reset, mc2asciiread, hist3, hist2, hist1, hist0, asciikey);
     keyprocess_component: keyprocessing port map(asciikey, keyormsg, mc2asciiread, full1, clock, reset, cipherkey, din, send1, wr_en1);
     keyexpansion_component: keyexpansion port map(clock, reset, cipherkey, send1, keyset);
     data2aes_fifo: fifo port map(clock,clock, reset, rd_en1, wr_en1, din, dout_fifo, full1, empty1);
-    aes128_full_component: aes128_full port map(clock, reset, full1, din, rd_en1, keyset, output_fifo_full, dout, wr_en);
+    aes128_full_component: aes128_full port map(clock, reset, full1, dout_fifo, rd_en1, keyset, empty1, message_out, wr_en2);
+    full2lcd_fifo: fifo port map(clock, clock, reset, rd_en2, wr_en2, message_out, lcd_message, full2, empty2);
+    lcdde: de2lcd port map(reset, clock, LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED, LCD_RW, DATA_BUS, lcd_message, empty2, rd_en2);
 
 end architecture structural;
