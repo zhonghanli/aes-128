@@ -37,6 +37,12 @@ clock <= not clock after clk_half_period;
 test: process
 begin
 	
+	hist3 <= X"00";
+	hist2 <= X"00";
+	hist1 <= X"00";
+	hist0 <= X"00";
+	
+	-- Letter j
 	reset <= '1';
 	wait for 2 ns;
 	-- reset all hists
@@ -46,7 +52,7 @@ begin
 	hist0 <= X"00";
 	reset <= '0';
 	wait for 2 ns;
- 	hist0 <= X"3B";
+ 	hist0 <= X"3B"; -- j
 	wait for 2 ns;
 	hist1 <= X"3B";
 	hist0 <= X"3B";
@@ -56,6 +62,7 @@ begin
 	hist0 <= X"3B";
 	wait for 20 ns;
 	
+	-- Letter k
 	reset <= '1';
 	wait for 2 ns;
 	-- reset all hists
@@ -65,7 +72,7 @@ begin
 	hist0 <= X"00";
 	reset <= '0';
 	wait for 2 ns;
-	hist0 <= X"42";
+	hist0 <= X"42"; -- k
 	wait for 2 ns;
 	hist1 <= X"42";
 	hist0 <= X"42";
@@ -81,9 +88,98 @@ begin
 	wait for 2 ns;
 	hist3 <= X"42";
 	hist2 <= X"42";
+	hist1 <= X"F0"; -- k released
+	hist0 <= X"42";
+	wait for 20 ns;
+	
+	-- Shift key case 1
+	reset <= '1';
+	wait for 2 ns;
+	-- reset all hists
+	hist3 <= X"00";
+	hist2 <= X"00";
+	hist1 <= X"00";
+	hist0 <= X"00";
+	reset <= '0';
+	wait for 2 ns;
+	hist0 <= X"12"; -- shift
+	wait for 2 ns;
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist3 <= X"12";
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist0 <= X"4B";
+	wait for 2 ns;
+	hist1 <= X"4B";
+	hist0 <= X"4B";
+	wait for 2 ns;
+	hist2 <= X"4B";
+	hist1 <= X"4B";
+	hist0 <= X"4B";
+	wait for 2 ns;
+	hist3 <= X"4B";
+	hist2 <= X"4B";
+	hist1 <= X"4B";
+	hist0 <= X"4B";
+	wait for 2 ns;
+	hist3 <= X"F0";
+	hist2 <= X"12";
 	hist1 <= X"F0";
-	hist0 <= X"42";
+	hist0 <= X"4B";
+	wait for 20 ns;
+	
+	-- Shift key case 2
+	reset <= '1';
+	wait for 2 ns;
+	-- reset all hists
+	hist3 <= X"00";
+	hist2 <= X"00";
+	hist1 <= X"00";
+	hist0 <= X"00";
+	reset <= '0';
+	wait for 2 ns;
+	hist0 <= X"12"; -- shift
+	wait for 2 ns;
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist3 <= X"12";
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12";
+	wait for 2 ns;
+	hist0 <= X"3A";
+	wait for 2 ns;
+	hist1 <= X"3A";
+	hist0 <= X"3A";
+	wait for 2 ns;
+	hist2 <= X"3A";
+	hist1 <= X"3A";
+	hist0 <= X"3A";
+	wait for 2 ns;
+	hist3 <= X"3A";
+	hist2 <= X"3A";
+	hist1 <= X"3A";
+	hist0 <= X"3A";
+	wait for 2 ns;
+	hist3 <= X"F0";
+	hist2 <= X"3A";
+	hist1 <= X"F0";
+	hist0 <= X"12";
 	wait for 100 ns;
+	
 	
 	
 end process;
