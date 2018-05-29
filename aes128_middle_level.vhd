@@ -3,6 +3,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 USE WORK.aes_const.all;
 
+-- To use in Modelsim, you need:
+-- aes_const, aes128_full, aes128_middle_level_sim
+-- testbench file
+-- aes128_step, fifo, keyexpansion, keyprocessing, mc_to_ascii, rkey_gen
+
 entity aes128_middle_level is
     port(
         signal clock : in std_logic;
