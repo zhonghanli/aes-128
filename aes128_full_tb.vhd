@@ -44,7 +44,7 @@ begin
     
     test : process
     begin
-        reset <= '1';
+        reset <= '0';
         input_fifo_empty <= '0';
         input_fifo_data <= X"54776F204F6E65204E696E652054776F"; 
         roundkeys(0 to 10) <= (
@@ -79,7 +79,14 @@ begin
 
         wait for 2 ns;
 
+        reset <= '1';
+
+        wait for 2 ns;
+
         reset <= '0';
+
+        wait for 200 ns;
+
     end process;
 
     
