@@ -26,6 +26,8 @@ architecture behavior of rkey_gen is
     signal subByte_arr, subByte_arr_c : std_array(3 downto 0);
     signal rcon_arr, rcon_arr_c : std_array(3 downto 0);
     signal in_key_arr : std_array(15 downto 0);
+    signal out_key_o, out_key_c : std_logic_vector(127 downto 0);
+    signal done_c : std_logic;
 begin
 
     in_key_update : process(in_key)
@@ -35,16 +37,16 @@ begin
         end loop;
     end process in_key_update;
 
-    rk_gen_fsm: process(in_key, in_key_arr, state, roundshifted_arr, subByte_arr, rcon_arr, start, step)
+    rk_gen_fsm: process(in_key, in_key_arr, state, roundshifted_arr, subByte_arr, rcon_arr, start, step, out_key_o)
         variable temp_out : std_logic_vector(127 downto 0);
 
     begin
         roundshifted_arr_c <= roundshifted_arr;
         subByte_arr_c <= subByte_arr;
         rcon_arr_c <= rcon_arr;
-        done <= '0';
-		  temp_out := (others => '0');
-		  out_key <= (others => '0');
+        done_c <= '0';
+		temp_out := (others => '0');
+		out_key_c <= out_key_o;
 
         case(state) is
             when s0 => 
@@ -72,17 +74,21 @@ begin
                 temp_out(95 downto 64) := in_key(95 downto 64) xor temp_out(127 downto 96);
                 temp_out(63 downto 32) := in_key(63 downto 32) xor temp_out(95 downto 64);
                 temp_out(31 downto 0) := in_key(31 downto 0) xor temp_out(63 downto 32);
-                out_key <= temp_out;
-                done <= '1';
+                out_key_c <= temp_out;
+                done_c <= '1';
                 next_state <= s0;                         
             when others =>
                 next_state <= s0;
                 -- roundshifted_arr <= (others=>(others => '0'));
                 -- subByte_arr <= (others=>(others => '0'));
-                -- rcon_arr <= (others=>(others => '0'));               
+                -- rcon_arr <= (others=>(others => '0'));   
+                out_key_c <= (others => 'X');
+                done_c <= 'X';            
                 
         end case;
     end process rk_gen_fsm;
+
+    out_key <= out_key_o;
 
 	clock_process : process(clock, reset)
     begin
@@ -91,11 +97,15 @@ begin
             roundshifted_arr <= (others=>(others => '0'));
             subByte_arr <= (others=>(others => '0'));
             rcon_arr <= (others=>(others => '0'));
+            out_key_o <= (others => '0');
+            done <= '0';
         elsif ( rising_edge(clock)) then
             state <= next_state;
             roundshifted_arr <= roundshifted_arr_c;
             subByte_arr <= subByte_arr_c;
             rcon_arr <= rcon_arr_c;
+            out_key_o <= out_key_c;
+            done <= done_c;
         end if; 
 
     end process clock_process;
