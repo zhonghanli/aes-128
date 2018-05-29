@@ -33,7 +33,7 @@ architecture behavior of aes128_full is
 
     signal start_vector : std_logic_vector(0 to 11);
     signal output_vector : quadword_arr(0 to 10);
-    signal send, ready : std_logic;
+    signal ready, ready_c : std_logic;
     signal step_arr : fourbit_arr(0 to 10);
 begin
     step_arr <= step_arr_const(0 to 10);
@@ -66,15 +66,15 @@ begin
         end generate other_steps;
     end generate gen_aes128_steps;
 
-    ready_process: process(input_fifo_empty, start_vector(11), output_vector(10), output_fifo_full, reset, ready)
+    combinational: process(ready, input_fifo_empty, start_vector(11), output_vector(10), output_fifo_full)
     begin
+        ready_c <= ready;
         start_vector(0) <= '0';
-		  wr_en <= '0';
-		  rd_en <= '0';
-
+		wr_en <= '0';
+        rd_en <= '0';
         case ready is
             when '1' =>
-                ready <= '0';
+                ready_c <= '0';
                 wr_en <= '0';
                 if input_fifo_empty = '0' then
                     start_vector(0) <= '1' ;
@@ -85,18 +85,27 @@ begin
                 end if;
             when '0' =>
                 if start_vector(11) = '1' then
-                    ready <= '1';
+                    ready_c <= '1';
                     if output_fifo_full = '0' then
                         wr_en <= '1';
                     else 
                         wr_en <= '0';
                     end if;
                 else
-                    ready<= '0';
+                    ready_c<= '0';
                 end if;
             when others =>
-                ready <= '1';
+                ready_c <= '1';
         end case;
+    end process;
+
+    ready_process: process(reset, clock)
+    begin       
+        if reset = '1' then
+            ready <= '1';
+        elsif (rising_edge(clock)) then
+            ready <= ready_c;
+        end if;
     end process;
 
 

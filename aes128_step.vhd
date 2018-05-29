@@ -26,9 +26,8 @@ architecture behavior of aes128_step is
     signal subByte_arr, subByte_arr_c : std_array(15 downto 0);
     signal roundShift_arr, roundShift_arr_c : std_array(15 downto 0);
     signal mixColumns_arr, mixColumns_arr_c : std_array(15 downto 0);
-
-    --signal done_c : std_logic;
-
+    signal done_c : std_logic;
+    signal out_vector_o, out_vector_c :std_logic_vector(127 downto 0);
 
 begin
     input_update : process(in_vector, roundkey)
@@ -39,7 +38,7 @@ begin
         end loop;
     end process input_update;
 
-    aes128_step_fsm : process(start,in_vector, roundkey, in_vector_arr, roundkey_arr, state, subByte_arr, roundShift_arr, mixColumns_arr, init_arr, step)
+    aes128_step_fsm : process(start,in_vector, roundkey, in_vector_arr, roundkey_arr, state, subByte_arr, roundShift_arr, mixColumns_arr, init_arr, step, out_vector_o)
             --variable transpose_arr, temp_rshift : std_array(15 downto 0);
             variable products : std_array(0 to 3);
     begin
@@ -47,13 +46,13 @@ begin
         subByte_arr_c <= subByte_arr;
         roundShift_arr_c <= roundShift_arr;
         mixColumns_arr_c <= mixColumns_arr;
-        done <= '0';
-		  out_vector<= (others=> '0');
+        done_c <= '0';
+		out_vector_c <= out_vector_o;
         case state is
             when s0 =>
                 if start = '1' and step = "0000" then
-                    out_vector <= in_vector xor roundkey;
-                    done <= '1';
+                    out_vector_c <= in_vector xor roundkey;
+                    done_c <= '1';
                     next_state <= s0;   
                 elsif start = '1' then 
                     init_arr_c <= in_vector_arr;
@@ -112,20 +111,23 @@ begin
             when s4 =>
                 if step = "1010" then
                     for i in 15 downto 0 loop
-                        out_vector(127-i*8 downto 128-(i+1)*8) <= roundShift_arr(15-i) xor roundkey_arr(15-i);
+                        out_vector_c(127-i*8 downto 128-(i+1)*8) <= roundShift_arr(15-i) xor roundkey_arr(15-i);
                     end loop;
                 else
                     for i in 15 downto 0 loop
-                        out_vector(127-i*8 downto 128-(i+1)*8) <= mixColumns_arr(15-i) xor roundkey_arr(15-i);
+                        out_vector_c(127-i*8 downto 128-(i+1)*8) <= mixColumns_arr(15-i) xor roundkey_arr(15-i);
                     end loop;
                 end if;
-                done <= '1';                       
+                done_c <= '1';                       
                 next_state <= s0;                      
             when others =>
                 next_state <= s0;
+                out_vector_c <= (others => 'X');
+                done_c <= 'X';
         end case;
     end process;
 
+    out_vector <= out_vector_o;
 
     clock_process : process(clock, reset)
     begin
@@ -135,12 +137,16 @@ begin
             subByte_arr <= (others=>(others => '0'));
             roundShift_arr <= (others=>(others => '0'));
             mixColumns_arr <= (others=>(others => '0'));
+            done <= '0';
+            out_vector_o <= (others => '0');
         elsif ( rising_edge(clock)) then
             state <= next_state;
             init_arr <= init_arr_c;
             subByte_arr <= subByte_arr_c;
             roundShift_arr <= roundShift_arr_c;
             mixColumns_arr <= mixColumns_arr_c;
+            done <= done_c;
+            out_vector_o<=out_vector_c;
         end if; 
 
     end process clock_process;
