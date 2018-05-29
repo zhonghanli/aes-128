@@ -349,6 +349,7 @@ begin
 						asciikey <= X"00";
 					end case;
 			else
+			-- lower case
 				case(hist0) is
 					when X"0E" =>
 						asciikey <= X"60";

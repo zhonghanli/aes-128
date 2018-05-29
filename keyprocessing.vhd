@@ -18,7 +18,7 @@ architecture behavior of keyprocessing is
   signal tempvector, tempvector_c : std_logic_vector(127 downto 0);
   -- signal counter, counter_c : std_logic_vector(3 downto 0);
   signal cipherkey_c, cipherkey_t, din_c, din_t : std_logic_vector(127 downto 0);
-  signal send_key, wr_enable, send_key_c, wr_enable_c : std_logic;
+  signal sent, sent_c, send_key, wr_enable, send_key_c, wr_enable_c : std_logic;
   signal counter, counter_c : integer range 0 to 15;
   type state_type is (s0, s1, s2);
   signal state, next_state : state_type;
@@ -32,6 +32,7 @@ begin
     tempvector_c <= tempvector;
 	counter_c <= counter;
     next_state <= state;
+    sent_c <= sent;
     send_key_c <= '0';
     wr_enable_c <= '0';
     cipherkey_c <= cipherkey_t;
@@ -42,20 +43,21 @@ begin
         if (read = '1') then
           if (asciikey /= X"81") then -- fill the next byte if system is ready to read and the key is not enter
             -- cast counter to integer before using it
+            sent_c <= '0';
             tempvector_c(127-counter*8 downto 128-(counter+1)*8) <= asciikey;
             if (counter = 15) then
               next_state <= s2; -- tempvector_c is filled: send it
             else
               counter_c <= counter + 1;
             end if;
-          else --Enter has been pressed
+          elsif (asciikey = X"81") and (sent_c = '0') then -- Enter has been pressed
             if counter = 15 then
                 	next_state <= s2; -- tempvector_c is filled: send it
-                else
+            else
                 	next_state <= s1; -- fill tempvector_c
-                end if;
-              end if;
             end if;
+          end if;
+        end if;
           when s1 => -- 'Enter' has been pressed: fill tempvector_c if counter is not 15 (i.e. tempvector is not filled with 16 bytes)
             if counter /= 15 then
               for ii in 0 to 15 loop -- left off here
@@ -78,6 +80,7 @@ begin
             end if;
             next_state <= s0;
             counter_c <= 0;
+            sent_c <= '1';
           when others =>
           	send_key_c <= 'X';
         end case;
@@ -94,6 +97,7 @@ begin
       wr_enable <= '0';
       din_t <= (others => '0');
       cipherkey_t <= (others => '0');
+      sent <= '0';
     elsif(rising_edge(clock)) then
       state <= next_state;
       counter <= counter_c;
@@ -102,6 +106,7 @@ begin
       wr_enable <= wr_enable_c;
       cipherkey_t <= cipherkey_c;
       din_t <= din_c;
+      sent <= sent_c;
     end if;
   end process;
  
