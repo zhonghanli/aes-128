@@ -8,18 +8,19 @@ ENTITY de2lcd IS
 	PORT(reset, clk_50Mhz				: IN	STD_LOGIC;
 		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
 		 LCD_RW						: BUFFER STD_LOGIC;
-		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
+		 DATA_BUS        : INOUT  STD_LOGIC_VECTOR(7 DOWNTO 0);
 		 data : in std_logic_vector(127 downto 0)
-
+ 
 		 );
-		 
 END de2lcd;
 
 ARCHITECTURE a OF de2lcd IS
 	TYPE STATE_TYPE IS (HOLD, FUNC_SET, DISPLAY_ON, MODE_SET, WRITE_CHAR1,
-	WRITE_CHAR2,WRITE_CHAR3,WRITE_CHAR4,WRITE_CHAR5,WRITE_CHAR6,WRITE_CHAR7,
-	WRITE_CHAR8, WRITE_CHAR9, WRITE_CHAR10, WRITE_CHAR11, WRITE_CHAR12,WRITE_CHAR13, WRITE_CHAR14, 
-	WRITE_CHAR15, WRITE_CHAR16, WRITE_CHAR17, LCD_CH_LINE, RETURN_HOME, TOGGLE_E, RESET1, RESET2, 
+	WRITE_CHAR2, WRITE_CHAR3, WRITE_CHAR4, WRITE_CHAR5, WRITE_CHAR6, WRITE_CHAR7,
+	WRITE_CHAR8, WRITE_CHAR9, WRITE_CHAR10, WRITE_CHAR11, WRITE_CHAR12, WRITE_CHAR13, WRITE_CHAR14, 
+	WRITE_CHAR15, WRITE_CHAR16, WRITE_CHAR17, WRITE_CHAR18, WRITE_CHAR19, WRITE_CHAR20, WRITE_CHAR21,
+	WRITE_CHAR22, WRITE_CHAR23, WRITE_CHAR24, WRITE_CHAR25, WRITE_CHAR26, WRITE_CHAR27, WRITE_CHAR28, 
+	WRITE_CHAR29, WRITE_CHAR30, WRITE_CHAR31, WRITE_CHAR32, LCD_CH_LINE, RETURN_HOME, TOGGLE_E, RESET1, RESET2, 
 	RESET3, DISPLAY_OFF, DISPLAY_CLEAR);
 	SIGNAL state, next_command: STATE_TYPE;
 	SIGNAL DATA_BUS_VALUE: STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -131,7 +132,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= hex2ascii(data(127 downto 124));
+						DATA_BUS_VALUE <= data(127 downto 120);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR2;
 -- Write ASCII hex character in second LCD character location
@@ -139,7 +140,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= hex2ascii(data(123 downto 120));
+						DATA_BUS_VALUE <= data(119 downto 112);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR3;
 -- Write ASCII hex character in third LCD character location
@@ -147,7 +148,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= hex2ascii(data(119 downto 116));
+						DATA_BUS_VALUE <= data(111 downto 104);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR4;
 -- Write ASCII hex character in fourth LCD character location
@@ -155,7 +156,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= hex2ascii(data(115 downto 112));
+						DATA_BUS_VALUE <= data(103 downto 96);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR5;
 -- Write ASCII hex character in fifth LCD character location
@@ -163,7 +164,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"33";
+						DATA_BUS_VALUE <= data(95 downto 88);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR6;
 -- Write ASCII hex character in sixth LCD character location
@@ -171,7 +172,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"35";
+						DATA_BUS_VALUE <= data(87 downto 80);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR7;
 -- Write ASCII hex character in seventh LCD character location
@@ -179,7 +180,7 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"35";
+						DATA_BUS_VALUE <= data(79 downto 72);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR8;
 -- Write ASCII hex character in eighth LCD character location
@@ -187,66 +188,66 @@ BEGIN
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"66";
+						DATA_BUS_VALUE <= data(71 downto 64);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR9;
 				WHEN WRITE_CHAR9 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(63 downto 56);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR10;
 				WHEN WRITE_CHAR10 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"6e";
+						DATA_BUS_VALUE <= data(55 downto 48);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR11;
 				WHEN WRITE_CHAR11 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"66";
+						DATA_BUS_VALUE <= data(47 downto 40);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR12;
 				WHEN WRITE_CHAR12 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(39 downto 32);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR13;
 				WHEN WRITE_CHAR13 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(31 downto 24);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR14;
 				WHEN WRITE_CHAR14 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(23 downto 16);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR15;
 				WHEN WRITE_CHAR15 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(15 downto 8);
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR16;
 				WHEN WRITE_CHAR16 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= data(7 downto 0);
 						state <= TOGGLE_E;
 						next_command <= LCD_CH_LINE;
--- Movo to second line of LCD
+-- Move to second line of LCD
 			WHEN LCD_CH_LINE =>
 						LCD_E <= '1';
 						LCD_RS <= '0';
@@ -254,14 +255,119 @@ BEGIN
 						DATA_BUS_VALUE <= X"C0";
 						state <= TOGGLE_E;
 						next_command <= WRITE_CHAR17;
+--Characters of 2nd line
 				WHEN WRITE_CHAR17 =>
 						LCD_E <= '1';
 						LCD_RS <= '1';
 						LCD_RW <= '0';
-						DATA_BUS_VALUE <= X"75";
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR18;
+				WHEN WRITE_CHAR18 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR19;
+				WHEN WRITE_CHAR19 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR20;
+				WHEN WRITE_CHAR20 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR21;
+				WHEN WRITE_CHAR21 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR22;
+				WHEN WRITE_CHAR22 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR23;
+				WHEN WRITE_CHAR23 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR24;
+				WHEN WRITE_CHAR24 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR25;
+				WHEN WRITE_CHAR25 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR26;
+				WHEN WRITE_CHAR26 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR27;
+				WHEN WRITE_CHAR27 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR28;
+				WHEN WRITE_CHAR28 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR29;
+				WHEN WRITE_CHAR29 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR30;
+				WHEN WRITE_CHAR30 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR31;
+				WHEN WRITE_CHAR31 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
+						state <= TOGGLE_E;
+						next_command <= WRITE_CHAR32;
+				WHEN WRITE_CHAR32 =>
+						LCD_E <= '1';
+						LCD_RS <= '1';
+						LCD_RW <= '0';
+						DATA_BUS_VALUE <= X"6e";
 						state <= TOGGLE_E;
 						next_command <= RETURN_HOME;
-
 
 -- Return write address to first character postion
 				WHEN RETURN_HOME =>
