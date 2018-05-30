@@ -2,8 +2,8 @@ setenv LMC_TIMEUNIT -9
 vlib work
 
 vcom -work work "aes_const.vhd"
-vcom -work work "aes128_full.vhd"
 vcom -work work "aes128_step.vhd"
+vcom -work work "aes128_full.vhd"
 vcom -work work "fifo.vhd"
 vcom -work work "keyexpansion.vhd"
 vcom -work work "keyprocessing.vhd"
@@ -38,11 +38,11 @@ add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_lev
 add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/keyprocess_component/wr_enable_out
 add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/keyprocess_component/din
 
-add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/dout
+add wave -noupdate -group aes128_middle_level_tb -radix hexadecimal /aes128_middle_level_tb/dut/dout
 
 add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/keyexpansion_component/start
 add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/keyexpansion_component/cipher_key
-add wave -noupdate -group aes128_middle_level_tb -radix hexadecimal /aes128_middle_level_tb/dut/keyexpansion_component/keys
+add wave -noupdate -group aes128_middle_level_tb -radix hexadecimal /aes128_middle_level_tb/dut/keyexpansion_component/keyset
 
 add wave -noupdate -group aes128_middle_level_tb -radix ASCII /aes128_middle_level_tb/dut/data2aes_fifo/din
 add wave -noupdate -group aes128_middle_level_tb /aes128_middle_level_tb/dut/data2aes_fifo/full

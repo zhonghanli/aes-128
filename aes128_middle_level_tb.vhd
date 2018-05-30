@@ -52,7 +52,7 @@ begin
 	-- E 24, x 22, p 4D, e 24, c 21, t 2C, o 44, space 29
 	-- p 4D, a 1C, t 2C, r 2D, o 44, n 31, u 3C, m 3A
 
-	
+	reset <= '0';
 	reset <= '1';
 	wait for 2 ns;
 	hist3 <= X"00";

@@ -52,7 +52,7 @@ begin
 	-- E 24, x 22, p 4D, e 24, c 21, t 2C, o 44, space 29
 	-- p 4D, a 1C, t 2C, r 2D, o 44, n 31, u 3C, m 3A
 
-	
+	reset <= '0';
 	reset <= '1';
 	wait for 2 ns;
 	hist3 <= X"00";
@@ -174,20 +174,21 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"24"; -- e released
 	wait for 2 ns;
+	-- get rid of space
 	hist3 <= X"24";
 	hist2 <= X"F0";
 	hist1 <= X"24";
-	hist0 <= X"29"; -- space pressed
+	hist0 <= X"1A"; -- z pressed
 	wait for 2 ns;
 	hist3 <= X"24";
-	hist2 <= X"29";
+	hist2 <= X"1A";
 	hist1 <= X"F0";
-	hist0 <= X"29"; -- space released
+	hist0 <= X"1A"; -- z released
 	wait for 2 ns;
 	
 	-- Granger
 	
-	hist3 <= X"29";
+	hist3 <= X"1A";
 	hist2 <= X"F0";
 	hist1 <= X"29";
 	hist0 <= X"12"; -- shift pressed
@@ -275,7 +276,7 @@ begin
 	hist3 <= X"2D";
 	hist2 <= X"F0";
 	hist1 <= X"2D";
-	hist0 <= X"24"; -- test: extra letter (17th letter), e, pressed
+	hist0 <= X"24"; -- test: key overflow detection. 17th letter, e, pressed
 	wait for 2 ns;
 	hist3 <= X"2D";
 	hist2 <= X"24";
@@ -375,20 +376,21 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"44"; -- o released
 	wait for 2 ns;
+	-- get rid of space
 	hist3 <= X"44";
 	hist2 <= X"F0";
 	hist1 <= X"44";
-	hist0 <= X"29"; -- space pressed
+	hist0 <= X"1A"; -- z pressed
 	wait for 2 ns;
 	hist3 <= X"44";
-	hist2 <= X"29";
+	hist2 <= X"1A";
 	hist1 <= X"F0";
-	hist0 <= X"29"; -- space released
+	hist0 <= X"1A"; -- z released
 	wait for 2 ns;
 	
 	-- patronum
 	
-	hist3 <= X"29";
+	hist3 <= X"1A";
 	hist2 <= X"F0";
 	hist1 <= X"29";
 	hist0 <= X"4D"; -- p pressed
@@ -478,7 +480,7 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"5A"; -- Enter released
 	
-	wait for 200 ns;
+	wait for 500 ns;
 
 	end process;
 end architecture behavior;
