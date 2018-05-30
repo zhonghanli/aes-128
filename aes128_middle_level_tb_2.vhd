@@ -174,21 +174,20 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"24"; -- e released
 	wait for 2 ns;
-	-- get rid of space
 	hist3 <= X"24";
 	hist2 <= X"F0";
 	hist1 <= X"24";
-	hist0 <= X"1A"; -- z pressed
+	hist0 <= X"29"; -- space pressed
 	wait for 2 ns;
 	hist3 <= X"24";
-	hist2 <= X"1A";
+	hist2 <= X"29";
 	hist1 <= X"F0";
-	hist0 <= X"1A"; -- z released
+	hist0 <= X"29"; -- space released
 	wait for 2 ns;
 	
 	-- Granger
 	
-	hist3 <= X"1A";
+	hist3 <= X"29";
 	hist2 <= X"F0";
 	hist1 <= X"29";
 	hist0 <= X"12"; -- shift pressed
@@ -281,13 +280,15 @@ begin
 	hist3 <= X"2D";
 	hist2 <= X"24";
 	hist1 <= X"F0";
-	hist0 <= X"24"; -- extra ltter released
+	hist0 <= X"24"; -- extra letter released
 	wait for 10 ns;
 	
 	-- Message: Expecto patronum
 	keyormsg <= '1';
 	
-	
+	reset <= '1';
+	wait for 2 ns;
+	reset <= '0'; 
 	-- Expecto
 	hist3 <= X"24";
 	hist2 <= X"F0";
@@ -376,21 +377,20 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"44"; -- o released
 	wait for 2 ns;
-	-- get rid of space
 	hist3 <= X"44";
 	hist2 <= X"F0";
 	hist1 <= X"44";
-	hist0 <= X"1A"; -- z pressed
+	hist0 <= X"29"; -- space pressed
 	wait for 2 ns;
 	hist3 <= X"44";
-	hist2 <= X"1A";
+	hist2 <= X"29";
 	hist1 <= X"F0";
-	hist0 <= X"1A"; -- z released
+	hist0 <= X"29"; -- space released
 	wait for 2 ns;
 	
 	-- patronum
 	
-	hist3 <= X"1A";
+	hist3 <= X"29";
 	hist2 <= X"F0";
 	hist1 <= X"29";
 	hist0 <= X"4D"; -- p pressed
@@ -473,6 +473,34 @@ begin
 	hist3 <= X"3A";
 	hist2 <= X"F0";
 	hist1 <= X"3A";
+	hist0 <= X"12"; -- shift pressed
+	wait for 2 ns;
+	hist3 <= X"F0";
+	hist2 <= X"3A";
+	hist1 <= X"12";
+	hist0 <= X"12"; -- shift held down
+	wait for 2 ns;
+	hist3 <= X"3A";
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12"; -- shift held down
+	wait for 2 ns;
+	hist3 <= X"12";
+	hist2 <= X"12";
+	hist1 <= X"12";
+	hist0 <= X"12"; -- shift held down
+	wait for 2 ns;
+	hist0 <= X"16"; -- 1 pressed
+	wait for 2 ns;
+	-- test: message overflow detection. 17th letter
+	hist3 <= X"F0"; -- both keys released, ! should appear
+	hist2 <= X"12";
+	hist1 <= X"F0";
+	hist0 <= X"16";
+	wait for 300 ns;
+	hist3 <= X"12";
+	hist2 <= X"F0";
+	hist1 <= X"16";
 	hist0 <= X"5A"; -- Enter pressed
 	wait for 2 ns;
 	hist3 <= X"3A";
@@ -480,7 +508,7 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"5A"; -- Enter released
 	
-	wait for 500 ns;
+	wait for 800 ns;
 
 	end process;
 end architecture behavior;

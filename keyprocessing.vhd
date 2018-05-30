@@ -22,6 +22,7 @@ architecture behavior of keyprocessing is
   signal counter, counter_c : integer range 0 to 15;
   type state_type is (s0, s1, s2);
   signal state, next_state : state_type;
+  signal keyormsgx : std_logic;
 -- s0: waiting for sth to happen
 -- s1: fill any remaining bytes with space bar (if msg/key is less than 16 bytes)
 -- s2: send key/msg
@@ -37,6 +38,12 @@ begin
     wr_enable_c <= '0';
     cipherkey_c <= cipherkey_t;
     din_c <= din_t;
+    if (keyormsgx /= keyormsg) then
+  		next_state <= s0;
+  		tempvector_c <= (others => '0');
+  		counter_c <= 0;
+  	end if;
+  	keyormsgx <= keyormsg;
     case(state) is
       when s0 =>
       -- check if read is 1;
@@ -81,6 +88,7 @@ begin
             next_state <= s0;
             counter_c <= 0;
             sent_c <= '1';
+            tempvector_c <= (others => '0');
           when others =>
           	send_key_c <= 'X';
         end case;

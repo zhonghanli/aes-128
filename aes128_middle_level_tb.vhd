@@ -285,8 +285,6 @@ begin
 	
 	-- Message: Expecto patronum
 	keyormsg <= '1';
-	
-	
 	-- Expecto
 	hist3 <= X"5A";
 	hist2 <= X"F0";
@@ -478,7 +476,7 @@ begin
 	hist1 <= X"F0";
 	hist0 <= X"5A"; -- Enter released
 	
-	wait for 200 ns;
+	wait for 800 ns;
 
 	end process;
 end architecture behavior;

@@ -33,6 +33,7 @@ add wave -noupdate -group aes128_middle_level_tb_2 -radix ASCII /aes128_middle_l
 add wave -noupdate -group aes128_middle_level_tb_2 /aes128_middle_level_tb_2/dut/keyprocess_component/keyormsg
 add wave -noupdate -group aes128_middle_level_tb_2 /aes128_middle_level_tb_2/dut/keyprocess_component/state
 add wave -noupdate -group aes128_middle_level_tb_2 /aes128_middle_level_tb_2/dut/keyprocess_component/next_state
+add wave -noupdate -group aes128_middle_level_tb_2 -radix ASCII /aes128_middle_level_tb_2/dut/keyprocess_component/tempvector
 add wave -noupdate -group aes128_middle_level_tb_2 /aes128_middle_level_tb_2/dut/keyprocess_component/send_key_out
 add wave -noupdate -group aes128_middle_level_tb_2 -radix ASCII /aes128_middle_level_tb_2/dut/keyprocess_component/cipherkey
 add wave -noupdate -group aes128_middle_level_tb_2 -radix ASCII /aes128_middle_level_tb_2/dut/keyprocess_component/wr_enable_out
@@ -50,3 +51,4 @@ add wave -noupdate -group aes128_middle_level_tb_2 /aes128_middle_level_tb_2/dut
 
 add wave -noupdate -group aes128_middle_level_tb_2 -radix ASCII /aes128_middle_level_tb_2/dut/aes128_full_component/input_fifo_data
 add wave -noupdate -group aes128_middle_level_tb_2 -radix hexadecimal /aes128_middle_level_tb_2/dut/aes128_full_component/roundkeys
+add wave -noupdate -group aes128_middle_level_tb_2 -radix hexadecimal /aes128_middle_level_tb_2/dut/aes128_full_component/output_fifo_data
