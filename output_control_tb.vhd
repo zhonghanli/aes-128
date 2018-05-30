@@ -73,6 +73,8 @@ begin
         reset <= '1';
         nextd <= '0';
         wait for 2 ns;
+        reset <= '0';
+
         wr_en <= '1';
         din <= x"5468617473206D79204B756E67204675";
         wait for 2 ns;
