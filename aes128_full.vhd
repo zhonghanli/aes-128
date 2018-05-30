@@ -74,11 +74,12 @@ begin
         rd_en <= '0';
         case ready is
             when '1' =>
-                ready_c <= '0';
+                ready_c <= '1';
                 wr_en <= '0';
                 if input_fifo_empty = '0' then
                     start_vector(0) <= '1' ;
                     rd_en <= '1';
+                    ready_c <= '0';
                 else
                     start_vector(0) <= '0';
                     rd_en <= '0';

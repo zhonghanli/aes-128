@@ -37,7 +37,8 @@ begin
     test:process
     begin
         reset <= '1';
-        cipher_key <= X"5468617473206D79204B756E67204675";
+        -- cipher_key <= X"5468617473206D79204B756E67204675";
+        cipher_key <= X"4865726d696f6e65204772616e676572"; --Hermione Granger
         start <= '0';
         wait for 2 ns;
         start <= '1';
