@@ -3,7 +3,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 USE WORK.aes_const.all;
 
-entity aes128_top_level is
+entity aes128_top_level_lcd is
     port(
         signal clock : in std_logic;
         signal reset : in std_logic;
@@ -17,11 +17,13 @@ entity aes128_top_level is
         signal RESET_LED : out std_logic;
         signal SEC_LED : out std_logic;
         signal LCD_RW : buffer std_logic;
-        signal DATA_BUS: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0)
-    );
-end entity aes128_top_level;
+        signal DATA_BUS: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-architecture structural of aes128_top_level is
+        signal nextd: std_logic
+    );
+end entity aes128_top_level_lcd;
+
+architecture structural of aes128_top_level_lcd is
     component ps2 is
         port( 	keyboard_clk, keyboard_data, clock_50MHz ,
                 reset : in std_logic;--, read : in std_logic;
@@ -105,9 +107,7 @@ architecture structural of aes128_top_level is
 		 LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED		: OUT	STD_LOGIC;
 		 LCD_RW						: BUFFER STD_LOGIC;
 		 DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
-		 fifo_data : in std_logic_vector(127 downto 0);
-		 fifo_empty : in std_logic;
-		 rd_en: in std_logic
+		 data : in std_logic_vector(127 downto 0)
 		 );
 		 
     END component de2lcd;
@@ -127,8 +127,8 @@ begin
     keyprocess_component: keyprocessing port map(asciikey, keyormsg, mc2asciiread, full1, clock, reset, cipherkey, din, send1, wr_en1);
     keyexpansion_component: keyexpansion port map(clock, reset, cipherkey, send1, keyset);
     data2aes_fifo: fifo port map(clock,clock, reset, rd_en1, wr_en1, din, dout_fifo, full1, empty1);
-    aes128_full_component: aes128_full port map(clock, reset, full1, dout_fifo, rd_en1, keyset, empty1, message_out, wr_en2);
+    aes128_full_component: aes128_full port map(clock, reset, empty1, dout_fifo, rd_en1, keyset, full2, message_out, wr_en2);
     full2lcd_fifo: fifo port map(clock, clock, reset, rd_en2, wr_en2, message_out, lcd_message, full2, empty2);
-    lcdde: de2lcd port map(reset, clock, LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED, LCD_RW, DATA_BUS, lcd_message, empty2, rd_en2);
+    lcdde: de2lcd port map(reset, clock, LCD_RS, LCD_E, LCD_ON, RESET_LED, SEC_LED, LCD_RW, DATA_BUS, lcd_message);
 
 end architecture structural;

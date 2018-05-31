@@ -28,7 +28,7 @@ architecture behavior of keyprocessing is
 -- s2: send key/msg
 begin
  
-  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t, read, keyormsg, full)
+  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t, read, keyormsg, full, sent)
   begin
     tempvector_c <= tempvector;
 	counter_c <= counter;
@@ -57,7 +57,7 @@ begin
             else
               counter_c <= counter + 1;
             end if;
-          elsif (asciikey = X"81") and (sent_c = '0') then -- Enter has been pressed
+          elsif (asciikey = X"81") and (sent = '0') then -- Enter has been pressed
             if counter = 15 then
                 	next_state <= s2; -- tempvector_c is filled: send it
             else

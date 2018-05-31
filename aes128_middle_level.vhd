@@ -102,6 +102,6 @@ begin
     keyprocess_component: keyprocessing port map(asciikey, keyormsg, mc2asciiread, full1, clock, reset, cipherkey, din, send1, wr_en1);
     keyexpansion_component: keyexpansion port map(clock, reset, cipherkey, send1, keyset);
     data2aes_fifo: fifo port map(clock,clock, reset, rd_en1, wr_en1, din, dout_fifo, full1, empty1);
-    aes128_full_component: aes128_full port map(clock, reset, full1, din, rd_en1, keyset, output_fifo_full, dout, wr_en);
+    aes128_full_component: aes128_full port map(clock, reset, empty1, din, rd_en1, keyset, output_fifo_full, dout, wr_en);
 
 end architecture structural;
