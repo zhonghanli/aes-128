@@ -28,7 +28,7 @@ architecture behavior of keyprocessing is
 -- s2: send key/msg
 begin
  
-  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t, read, keyormsg, full, sent)
+  key_fsm : process (asciikey, counter, tempvector, state, cipherkey_t, din_t, read, keyormsg, full, sent, keyormsgx)
   begin
     tempvector_c <= tempvector;
 	counter_c <= counter;

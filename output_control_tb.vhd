@@ -92,6 +92,7 @@ begin
         nextd <= '1';
         wait for 10 ns;
         nextd <= '0';
+        wait for 100 ns;
     end process;
 
 end architecture behavioral;

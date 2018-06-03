@@ -14,7 +14,7 @@ entity output_control is
 end entity output_control;
 
 architecture behavior of output_control is
-    type state_type is (s0, s1);
+    type state_type is (s0, s1, s2);
     signal state, next_state : state_type;
 
     signal dout_c, dout_o : std_logic_vector(127 downto 0);
@@ -22,14 +22,12 @@ architecture behavior of output_control is
 begin
     clock_process : process(clock, reset)
     begin
-        if reset = '1' then
+        if reset = '0' then
             state <= s0;
             dout_o <= (others=> '0');
-            rd_en <= '0';
         elsif (rising_edge(clock)) then
             state <= next_state;
             dout_o <= dout_c;
-            rd_en <= rd_en_c;
         end if; 
     end process clock_process;
 
@@ -37,24 +35,26 @@ begin
 
     fsm_process : process(nextd, fifo_empty, state, din, dout_o)
     begin
-        rd_en_c <= '0';
+        rd_en <= '0';
         dout_c <= dout_o;
+		  next_state <=state;
         case state is
             when s0 =>
-                if fifo_empty = '0' and nextd = '1' then
-                    rd_en_c <= '1';
+                if nextd = '0' then
                     next_state <= s1;
-                    dout_c <= din;
-                else 
-                    rd_en_c <= '0';
-                    next_state <= s0;
                 end if;
             when s1 =>
-                if nextd <= '0' then
-                    next_state <=s0;
-                else 
-                    next_state <= s1;
-                end if;            
+                if nextd <= '1' then
+                    next_state <=s2;
+                end if;
+            when s2 =>
+                if fifo_empty = '0' then                    
+                    rd_en <= '1';
+                    dout_c <= din;
+                    next_state <= s0;
+                end if; 
+            when others =>
+                next_state <= s0;           
         end case;
     end process fsm_process;
 end architecture behavior;
