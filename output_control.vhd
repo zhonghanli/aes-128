@@ -22,7 +22,7 @@ architecture behavior of output_control is
 begin
     clock_process : process(clock, reset)
     begin
-        if reset = '0' then
+        if reset = '1' then
             state <= s0;
             dout_o <= (others=> '0');
         elsif (rising_edge(clock)) then
@@ -37,7 +37,7 @@ begin
     begin
         rd_en <= '0';
         dout_c <= dout_o;
-		  next_state <=state;
+		next_state <=state;
         case state is
             when s0 =>
                 if nextd = '0' then

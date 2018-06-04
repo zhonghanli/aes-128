@@ -48,7 +48,7 @@ ARCHITECTURE a OF keyboard IS
 		PROCESS
 		BEGIN
 			WAIT UNTIL (KEYBOARD_CLK_filtered'EVENT AND KEYBOARD_CLK_filtered = '1');
-			IF RESET = '0' THEN
+			IF RESET = '1' THEN
 				INCNT <= "0000";
 				READ_CHAR <= '0';
 			ELSE
