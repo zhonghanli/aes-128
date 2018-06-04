@@ -71,7 +71,7 @@ begin
     test: process
     begin
         reset <= '1';
-        nextd <= '0';
+        nextd <= '1';
         wait for 2 ns;
         reset <= '0';
 
@@ -85,14 +85,14 @@ begin
         wait for 2 ns;
         wr_en <= '0';
         wait for 5 ns;
-        nextd<= '1';
-        wait for 10 ns;
         nextd<= '0';
-        wait for 5 ns;
-        nextd <= '1';
         wait for 10 ns;
+        nextd<= '1';
+        wait for 5 ns;
         nextd <= '0';
-        wait for 100 ns;
+        wait for 10 ns;
+        nextd <= '1';
+        wait for 300 ns;
     end process;
 
 end architecture behavioral;

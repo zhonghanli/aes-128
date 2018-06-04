@@ -11,7 +11,8 @@ entity ps2 is
 			hist3 : out std_logic_vector(7 downto 0);
 			hist2 : out std_logic_vector(7 downto 0);
 			hist1 : out std_logic_vector(7 downto 0);
-			hist0 : out std_logic_vector(7 downto 0)
+			hist0 : out std_logic_vector(7 downto 0);
+			led_array : out std_logic_vector(55 downto 0)
 		);
 end entity ps2;
 
@@ -32,6 +33,12 @@ port(
 	clk: in std_logic );
 end component oneshot;
 
+component leddcd is
+	port(
+		data_in : in std_logic_vector(3 downto 0);
+		segments_out : out std_logic_vector(6 downto 0)
+	   );
+end component leddcd;
 
 signal scan2 : std_logic;
 signal scan_code2 : std_logic_vector( 7 downto 0 );
@@ -42,6 +49,15 @@ signal history0 : std_logic_vector(7 downto 0);
 signal read : std_logic;
 
 begin
+
+led0: leddcd port map(history0(3 downto 0), led_array(6 downto 0));
+led1: leddcd port map(history0(7 downto 4), led_array(13 downto 7));
+led2: leddcd port map(history1(3 downto 0), led_array(20 downto 14));
+led3: leddcd port map(history1(7 downto 4), led_array(27 downto 21));
+led4: leddcd port map(history2(3 downto 0), led_array(34 downto 28));
+led5: leddcd port map(history2(7 downto 4), led_array(41 downto 35));
+led6: leddcd port map(history3(3 downto 0), led_array(48 downto 42));
+led7: leddcd port map(history3(7 downto 4), led_array(55 downto 49));
 
 u1: keyboard port map(	
 				keyboard_clk => keyboard_clk,
