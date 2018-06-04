@@ -71,7 +71,7 @@ begin
     test: process
     begin
         reset <= '1';
-        nextd <= '1';
+        nextd <= '0';
         wait for 2 ns;
         reset <= '0';
 
@@ -84,14 +84,14 @@ begin
         din <= x"E232FCF191129188B159E4E6D679A293";
         wait for 2 ns;
         wr_en <= '0';
-        wait for 5 ns;
-        nextd<= '0';
-        wait for 10 ns;
+        wait for 6 ns;
         nextd<= '1';
-        wait for 5 ns;
-        nextd <= '0';
         wait for 10 ns;
+        nextd<= '0';
+        wait for 50 ns;
         nextd <= '1';
+        wait for 10 ns;
+        nextd <= '0';
         wait for 300 ns;
     end process;
 

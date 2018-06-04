@@ -19,6 +19,7 @@ architecture behavior of output_control is
 
     signal dout_c, dout_o : std_logic_vector(127 downto 0);
     signal rd_en_c : std_logic;
+    signal wtf : std_logic;
 begin
     clock_process : process(clock, reset)
     begin
@@ -40,12 +41,16 @@ begin
 		next_state <=state;
         case state is
             when s0 =>
-                if nextd = '0' then
+                if nextd = '1' then
                     next_state <= s1;
+                else
+                    next_state <= s0;
                 end if;
             when s1 =>
-                if nextd <= '1' then
+                if nextd = '0' then
                     next_state <=s2;
+                else 
+                    next_state <= s1;
                 end if;
             when s2 =>
                 if fifo_empty = '0' then                    
